@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Task Hand</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="about_us">About Us</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank FRAGMENT</string>
+    <string name="calender">Calender</string>
+    <string name="alarm">Reminder Timing</string>
+</resources>
