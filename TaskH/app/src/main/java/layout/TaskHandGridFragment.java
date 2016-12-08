@@ -1,5 +1,6 @@
 package layout;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,13 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.shubham.taskh.DataBase.TaskHandDBHelper;
 import com.example.shubham.taskh.DataBase.TaskHandDataListProvider;
 import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.TaskHandAdapter.TaskHandDataAdapter;
+import com.example.shubham.taskh.TaskHandAdapter.TaskHandGridDataAdapter;
 import com.example.shubham.taskh.Utility.AppContext;
 import com.example.shubham.taskh.View.TaskHandDetailActivity;
 
@@ -28,36 +29,36 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TaskHandListFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
-    private TaskHandDataAdapter mDataAdapter;
-    private ListView mListView;
+public class TaskHandGridFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+
+    private GridView mGridView;
     private ArrayList<TaskHandDataListProvider> mHandDataListProviderArrayList;
     private TaskHandDBHelper mTaskHandDbHelper;
     private SQLiteDatabase mSqLiteDatabase;
+    private TaskHandGridDataAdapter mTaskHandGridDataAdapter;
     private View view;
 
-    public TaskHandListFragment() {
+    public TaskHandGridFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         mTaskHandDbHelper = new TaskHandDBHelper(getActivity());
         mSqLiteDatabase = mTaskHandDbHelper.getReadableDatabase();
         mHandDataListProviderArrayList = mTaskHandDbHelper.getTaskListData(mSqLiteDatabase);
-
         Log.e("Data", "" + mHandDataListProviderArrayList);
         if (mHandDataListProviderArrayList.size() != 0)
         {
             Log.e("Data", mHandDataListProviderArrayList.get(0).getmTaskName());
-            view = inflater.inflate(R.layout.fragment_task_hand_list, container, false);
-            mListView = (ListView) view.findViewById(R.id.task_hand_list_view);
-            mDataAdapter = new TaskHandDataAdapter(getActivity(), mHandDataListProviderArrayList);
-            mListView.setAdapter(mDataAdapter);
-            mListView.setOnItemClickListener(this);
-            mListView.setOnItemLongClickListener(this);
+            view = inflater.inflate(R.layout.fragment_task_hand_grid, container, false);
+            mGridView=(GridView)view.findViewById(R.id.task_hand_gridView);
+            mTaskHandGridDataAdapter=new TaskHandGridDataAdapter(getActivity(),mHandDataListProviderArrayList);
+            mGridView.setAdapter(mTaskHandGridDataAdapter);
+            mGridView.setOnItemClickListener(this);
+            mGridView.setOnItemLongClickListener(this);
         }
         else {
             //layout with a image of logo
@@ -74,14 +75,13 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
         mSqLiteDatabase = mTaskHandDbHelper.getReadableDatabase();
         mHandDataListProviderArrayList = mTaskHandDbHelper.getTaskListData(mSqLiteDatabase);
         Log.e("Data", "" + mHandDataListProviderArrayList);
-        mDataAdapter = new TaskHandDataAdapter(getActivity(), mHandDataListProviderArrayList);
-        mListView.setAdapter(mDataAdapter);
-        //TODo when list is empty and u don't add any value
-//        mDataAdapter.notifyDataSetChanged();
+        mTaskHandGridDataAdapter=new TaskHandGridDataAdapter(getActivity(),mHandDataListProviderArrayList);
+        mGridView.setAdapter(mTaskHandGridDataAdapter);
+        //todo when db is empty
     }
-
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
         adapterView.getItemAtPosition(position);
         int id=mHandDataListProviderArrayList.get(position).getmTask_Id();
         String name=mHandDataListProviderArrayList.get(position).getmTaskName();
@@ -100,7 +100,6 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
         detailIntent.putExtras(taskBundle);
         startActivity(detailIntent);
     }
-
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
 
@@ -111,7 +110,7 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int id) {
-                               mTaskHandDbHelper.deleteNotes(id);
+                                mTaskHandDbHelper.deleteNotes(id);
                                 Toast.makeText(AppContext.getContext(), "Deleted Successfully",Toast.LENGTH_SHORT).show();
 
                             }

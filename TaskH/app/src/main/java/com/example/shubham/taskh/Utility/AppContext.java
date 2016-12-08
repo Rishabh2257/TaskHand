@@ -9,16 +9,18 @@ import android.content.Context;
 public class AppContext extends Application {
     private static Context mContext;
 
-    public void onCreate(){
-        super.onCreate();
-        mContext = mContext.getApplicationContext();
-    }
-
-    /***
-     * method for returning the app context which can be accessed directly
-     * @return app ontext
-     */
-    public static Context getAppContext(){
+    public static Context getContext() {
         return mContext;
     }
+
+    public static void setmContext(Context mContext) {
+        AppContext.mContext = mContext;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setmContext(this);
+    }
+
 }

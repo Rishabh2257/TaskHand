@@ -10,5 +10,8 @@
     <color name="brand_primary_back">#CCE3F0</color>
     <color name="brand_gray_back">#D9D9D9</color>
     <color name="brand_gray_base">#414141</color>
+    <color name="holo_orange_dark">#ffff8800</color>
+    <color name="holo_purple">#ffaa66cc</color>
+    <color name="holo_red_light">#ffff4444</color>
 
 </resources>

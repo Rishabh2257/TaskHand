@@ -3,19 +3,20 @@
     package="com.example.shubham.taskh">
 
     <application
+        android:name=".Utility.AppContext"
         android:allowBackup="true"
         android:icon="@drawable/pirates_colour"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TaskHandleMain">
+        <activity android:name=".View.TaskHandleMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TaskHandDetailActivity"></activity>
+        <activity android:name=".View.TaskHandDetailActivity"></activity>
+
     </application>
 
 </manifest>

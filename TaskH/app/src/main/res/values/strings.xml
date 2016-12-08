@@ -10,4 +10,16 @@
     <string name="hello_blank_fragment">Hello blank FRAGMENT</string>
     <string name="calender">Calender</string>
     <string name="alarm">Reminder Timing</string>
+    <string name="save_button">Save</string>
+    <string name="task_name">Task Name</string>
+    <string name="priority">Priority</string>
+    <string name="DeleteNote">Want To Delete This Task</string>
+    <string name="search">search</string>
+    <string name="task_grid">Grid View</string>
+    <string name="task_list">List View</string>
+    <string-array name="priority">
+        <item>Lowest</item>
+        <item>Medium</item>
+        <item>Highest</item>
+    </string-array>
 </resources>
