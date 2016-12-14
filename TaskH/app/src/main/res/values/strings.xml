@@ -20,7 +20,7 @@
     <string name="task_list">List View</string>
     <string name="task_add">Create Task</string>
     <string name="task_reminder">Reminder</string>
-    <string name="task_hand_detail">ColorNote reminds you of the saved notes so that you will never miss anything important.
+    <string name="task_hand_detail">Task Hand reminds you of the saved notes so that you will never miss anything important.
 You can concentrate on what really matters in your life instead of worrying about remembering stuff.</string>
     <string name="assign_priority">Assign Priorities to Task</string>
     <string name="view_by_colour">View Priority By Colour</string>
