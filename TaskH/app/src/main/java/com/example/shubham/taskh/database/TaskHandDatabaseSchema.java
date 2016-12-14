@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.DataBase;
+package com.example.shubham.taskh.database;
 
 /**
  * Created by shubham on 2/12/16.

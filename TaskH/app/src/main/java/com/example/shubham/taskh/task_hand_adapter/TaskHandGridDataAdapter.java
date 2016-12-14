@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.TaskHandAdapter;
+package com.example.shubham.taskh.task_hand_adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shubham.taskh.DataBase.TaskHandDataListProvider;
+import com.example.shubham.taskh.database.TaskHandDataProvider;
 import com.example.shubham.taskh.R;
 
 import java.text.SimpleDateFormat;
@@ -19,23 +19,23 @@ import java.util.ArrayList;
  * Created by shubham on 7/12/16.
  */
 public class TaskHandGridDataAdapter extends BaseAdapter{
-    private ArrayList<TaskHandDataListProvider> mTaskHandDataListProviderArrayList;
-    private TaskHandDataListProvider mListProvider;
+    private ArrayList<TaskHandDataProvider> mTaskHandDataProviderHandDataListProviderArrayList;
+    private TaskHandDataProvider mListProvider;
     private Context mContext;
 
-    public TaskHandGridDataAdapter(Context context, ArrayList<TaskHandDataListProvider> arrayList) {
+    public TaskHandGridDataAdapter(Context context, ArrayList<TaskHandDataProvider> arrayList) {
         this.mContext = context;
-        this.mTaskHandDataListProviderArrayList = arrayList;
+        this.mTaskHandDataProviderHandDataListProviderArrayList = arrayList;
     }
 
     @Override
     public int getCount() {
-        return mTaskHandDataListProviderArrayList.size();
+        return mTaskHandDataProviderHandDataListProviderArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mTaskHandDataListProviderArrayList.get(position);
+        return mTaskHandDataProviderHandDataListProviderArrayList.get(position);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TaskHandGridDataAdapter extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
         //setting data in views
-        mListProvider = mTaskHandDataListProviderArrayList.get(position);
+        mListProvider = mTaskHandDataProviderHandDataListProviderArrayList.get(position);
         Log.e("data", "" + mListProvider);
         viewHolder.mTaskHandNameTextView.setText(mListProvider.getmTaskName());
         Log.e("Data", "" + mListProvider.getmTaskName());

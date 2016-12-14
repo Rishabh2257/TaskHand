@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Task Hand</string>
+    <string name="what_you_do">What We Provide</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="about_us">About Us</string>
@@ -17,9 +18,29 @@
     <string name="search">search</string>
     <string name="task_grid">Grid View</string>
     <string name="task_list">List View</string>
+    <string name="task_add">Create Task</string>
+    <string name="task_reminder">Reminder</string>
+    <string name="task_hand_detail">ColorNote reminds you of the saved notes so that you will never miss anything important.
+You can concentrate on what really matters in your life instead of worrying about remembering stuff.</string>
+    <string name="assign_priority">Assign Priorities to Task</string>
+    <string name="view_by_colour">View Priority By Colour</string>
+    <string name="lowest">Lowest</string>
+    <string name="medium">Medium</string>
+    <string name="highest">Highest</string>
+    <string name="to_delete">To Delete</string>
+    <string name="mechanism">Long Press on Task</string>
+    <string name="to_add">To Add</string>
+    <string name="mechanism_to_add">Press plus icon Floating Button</string>
+    <string name="to_update">To Update</string>
+    <string name="mechanism_to_update">Click or Touch on Task and Then Fill  The Details</string>
     <string-array name="priority">
         <item>Lowest</item>
         <item>Medium</item>
         <item>Highest</item>
+    </string-array>
+
+    <string-array name="sort">
+        <item>By Priority</item>
+        <item>By Creation Time</item>
     </string-array>
 </resources>

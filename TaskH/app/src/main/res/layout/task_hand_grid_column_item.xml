@@ -57,7 +57,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.2"
-                    android:src="@drawable/time" />
+                    android:src="@android:drawable/ic_lock_idle_alarm" />
 
                 <TextView
                     android:id="@+id/task_hand_column_date"

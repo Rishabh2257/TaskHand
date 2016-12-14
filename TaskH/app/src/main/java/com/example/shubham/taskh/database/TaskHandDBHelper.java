@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.DataBase;
+package com.example.shubham.taskh.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,10 +9,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Calendar;
 
 /**
  * Created by shubham on 2/12/16.
@@ -25,13 +23,15 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
     //insert table query
     private static final String TABLE_QUERY = "CREATE TABLE " + TaskHandDatabaseSchema.TABLE_NAME + "("
             + TaskHandDatabaseSchema.TaskDetail.TASK_ID + " INTEGER PRIMARY KEY,"
-            + TaskHandDatabaseSchema.TaskDetail.TASK_NAME + " TEXT NOT NULL,"
+            + TaskHandDatabaseSchema.TaskDetail.TASK_NAME + " TEXT UNIQUE,"
             + TaskHandDatabaseSchema.TaskDetail.TASK_DETAIL + " TEXT,"
             + TaskHandDatabaseSchema.TaskDetail.TASK_PRIORITY + " TEXT,"
             + TaskHandDatabaseSchema.TaskDetail.TASK_TIME_CREATION + " INTEGER,"
             + TaskHandDatabaseSchema.TaskDetail.TASK_TIME_REMINDER + " INTEGER" + ")";
-    ArrayList<TaskHandDataListProvider> mTaskHandDataListProvidersList;
-    private TaskHandDataListProvider mTaskHandDataListProvider;
+
+            ArrayList<TaskHandDataProvider> mTaskHandDataProviderHandDataListProvidersList;
+    private TaskHandDataProvider mTaskHandDataProvider;
+    private TaskHandDataProvider mTaskHandSearchList;
 
     public TaskHandDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
@@ -81,12 +81,10 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
      * method for adding data in list view
      *
      * @param iSqLiteDatabase : instance of database
-     * @return :ArrayList<TaskHandDataListProvider> which contains arraylist of data from database
+     * @return :ArrayList<TaskHandDataProvider> which contains arraylist of data from database
      */
-
-    public ArrayList<TaskHandDataListProvider> getTaskListData(SQLiteDatabase iSqLiteDatabase) {
-        //mTaskHandDataListProvider=null;
-        mTaskHandDataListProvidersList = new ArrayList<TaskHandDataListProvider>();
+    public ArrayList<TaskHandDataProvider> getTaskListData(SQLiteDatabase iSqLiteDatabase) {
+        mTaskHandDataProviderHandDataListProvidersList = new ArrayList<TaskHandDataProvider>();
         Cursor cursor = null;
         String[] iProjection = {
                 TaskHandDatabaseSchema.TaskDetail.TASK_ID,
@@ -97,11 +95,11 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
                 TaskHandDatabaseSchema.TaskDetail.TASK_TIME_CREATION
         };
         try {
-            cursor = iSqLiteDatabase.query(TaskHandDatabaseSchema.TABLE_NAME, iProjection, null, null, null, null, null);
+            cursor = iSqLiteDatabase.query(TaskHandDatabaseSchema.TABLE_NAME, iProjection, null, null, null, null, TaskHandDatabaseSchema.TaskDetail.TASK_NAME + " ASC");
             Log.d(TAG + "DB operation", "implementing getting result from database");
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    mTaskHandDataListProvider = new TaskHandDataListProvider(cursor.getInt(0), cursor.getString(1), cursor.getLong(4),
+                    mTaskHandDataProvider = new TaskHandDataProvider(cursor.getInt(0), cursor.getString(1), cursor.getLong(4),
                             cursor.getString(3), cursor.getString(2), cursor.getLong(5));
 
                     Log.e("data", "" + cursor.getString(0));
@@ -111,7 +109,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
                     Log.e("data", "" + cursor.getString(4));
                     Log.e("data", "" + cursor.getString(5));
 
-                    mTaskHandDataListProvidersList.add(mTaskHandDataListProvider);
+                    mTaskHandDataProviderHandDataListProvidersList.add(mTaskHandDataProvider);
                 }
             }
         } catch (CursorIndexOutOfBoundsException | SQLiteException | NullPointerException e) {
@@ -120,7 +118,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
             if (cursor != null)
                 cursor.close();
         }
-        return mTaskHandDataListProvidersList;
+        return mTaskHandDataProviderHandDataListProvidersList;
     }
 
 
@@ -134,11 +132,11 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
      *
      * @return :in string form the current date and time
      */
-    private String getDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm", Locale.getDefault());
-        Date date = new Date();
-        return dateFormat.format(date);
+    private long getDateTime() {
+//        SimpleDateFormat dateFormat = new SimpleDateFormat(
+//                "yyyy-MM-dd HH:mm", Locale.getDefault());
+        long currentDate= Calendar.getInstance().getTimeInMillis();
+        return currentDate;
     }
 
     public boolean updateTask(int id, String iTaskName, String iTaskDetail,
@@ -150,11 +148,57 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
         iValues.put(TaskHandDatabaseSchema.TaskDetail.TASK_TIME_REMINDER, iTaskReminder);
         iValues.put(TaskHandDatabaseSchema.TaskDetail.TASK_TIME_CREATION, getDateTime());
         db.update(TaskHandDatabaseSchema.TABLE_NAME, iValues, TaskHandDatabaseSchema.TaskDetail.TASK_ID
-                + "= ? ",new String[]{Integer.toString(id)});
+                + "= ? ", new String[]{Integer.toString(id)});
         return true;
     }
 
-    public void deleteNotes(int id) {
+    public void deleteNotes(int id, SQLiteDatabase db) {
+        Log.d("DELETE", "" + id);
+        db.execSQL("DELETE FROM " + TaskHandDatabaseSchema.TABLE_NAME + " WHERE " + TaskHandDatabaseSchema.TaskDetail.TASK_ID + "='" + id + "'");
+        db.close();
 
     }
+
+    public ArrayList<TaskHandDataProvider> getTaskHandSearchList(String name, SQLiteDatabase db) {
+        ArrayList List = new ArrayList<TaskHandDataProvider>();
+        Cursor cursor = null;
+        String[] iProjection = {
+                TaskHandDatabaseSchema.TaskDetail.TASK_ID,
+                TaskHandDatabaseSchema.TaskDetail.TASK_NAME,
+                TaskHandDatabaseSchema.TaskDetail.TASK_DETAIL,
+                TaskHandDatabaseSchema.TaskDetail.TASK_PRIORITY,
+                TaskHandDatabaseSchema.TaskDetail.TASK_TIME_REMINDER,
+                TaskHandDatabaseSchema.TaskDetail.TASK_TIME_CREATION
+        };
+
+        try {
+            cursor = db.query(TaskHandDatabaseSchema.TABLE_NAME, iProjection,
+                    TaskHandDatabaseSchema.TaskDetail.TASK_NAME+"LIKE ?",new String []{"%"+name+"%"},
+                    null, null, null);
+            Log.d(TAG + "DB operation dataSearch", "implementing getting result from database");
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    mTaskHandSearchList = new TaskHandDataProvider(cursor.getInt(0), cursor.getString(1), cursor.getLong(4),
+                            cursor.getString(3), cursor.getString(2), cursor.getLong(5));
+
+                    Log.e("dataSearch", "" + cursor.getString(0));
+                    Log.e("dataSearch", "" + cursor.getString(1));
+                    Log.e("dataSearch", "" + cursor.getString(2));
+                    Log.e("dataSearch", "" + cursor.getString(3));
+                    Log.e("dataSearch", "" + cursor.getString(4));
+                    Log.e("dataSearch", "" + cursor.getString(5));
+
+                    List.add(mTaskHandSearchList);
+                }
+            }
+        } catch (CursorIndexOutOfBoundsException | SQLiteException | NullPointerException e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        db.close();
+        return List;
+    }
+
 }

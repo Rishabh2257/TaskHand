@@ -16,9 +16,6 @@
             android:icon="@drawable/pirates_black"
             android:title="@string/about_us" />
     </group>
-    <item
-        android:id="@+id/calender"
-        android:icon="@drawable/calendar"
-        android:title="@string/calender" />
+
 
 </menu>

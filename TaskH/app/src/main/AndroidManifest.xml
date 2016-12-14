@@ -2,20 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shubham.taskh">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
-        android:name=".Utility.AppContext"
+        android:name=".utility.AppContext"
         android:allowBackup="true"
         android:icon="@drawable/pirates_colour"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.TaskHandleMain">
+        <activity
+            android:name=".TaskHandSplash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.TaskHandDetailActivity"></activity>
+        <activity
+            android:name=".view.TaskHandleMain"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.TaskHandDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".alarm_new.AlarmReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.example.shubham.taskh.alarm_new.notification" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

@@ -1,9 +1,10 @@
-package com.example.shubham.taskh.View;
+package com.example.shubham.taskh.view;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,13 +16,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.shubham.taskh.DataBase.TaskHandDBHelper;
+import com.example.shubham.taskh.alarm_new.AlarmDetails;
+import com.example.shubham.taskh.alarm_new.AlarmHelper;
+import com.example.shubham.taskh.database.TaskHandDBHelper;
 import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.Utility.AppContext;
+import com.example.shubham.taskh.task_hand_adapter.TaskHandDataAdapter;
+import com.example.shubham.taskh.utility.AppContext;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,11 +33,14 @@ import java.util.Locale;
 /**
  * Task Detail Class for storing detail of task
  * setting reminder for a particular time and date
+ * with notification and ringtone
  */
 public class TaskHandDetailActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
     Calendar chosenCalendar = Calendar.getInstance();
+    private AlarmDetails  mDetails;
+
+    private AlarmHelper alarmHelper;
     private Toolbar mDetailToolbar;
-    private TextView txt;
     private EditText mTaskHandDateEditText;
     private EditText mTaskHandTimeEditText;
     private EditText mTaskHandTaskNameEditText;
@@ -47,6 +53,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
     private int mDay;
     private int mHour;
     private int mMinute;
+    private int mSecond=0;
     private int mTaskId;
     private String mPriority;
     private String mName;
@@ -54,6 +61,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
     private TaskHandDBHelper mTaskHandDBHelper;
     private SQLiteDatabase mSqLiteDatabase;
     private long datetime;
+    private TaskHandDataAdapter mTaskHandAdapter;
     private Intent mTaskHandIntent;
 
     @Override
@@ -77,10 +85,13 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         ArrayAdapter<CharSequence> staticSpinnerAdapter = ArrayAdapter
                 .createFromResource(this, R.array.priority,
                         android.R.layout.simple_spinner_item);
+
         // Specify the layout to use when the list of choices appears
         staticSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         // Apply the adapter to the spinner
         mTaskHandPrioritySpinner.setAdapter(staticSpinnerAdapter);
+
         //setting data from bundle if data is already present
         mTaskHandIntent = getIntent();
         if (mTaskHandIntent.getExtras() != null) {
@@ -91,6 +102,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
             String priority = getTaskBundle.getString("taskPriority");
             long reminderDateTime = getTaskBundle.getLong("taskReminder", 0);
             mTaskId = getTaskBundle.getInt("taskId", 0);
+
             //setting date
             SimpleDateFormat reminderDateFormat = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat reminderTimeFormat = new SimpleDateFormat("HH-mm");
@@ -118,6 +130,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                 Log.e("spinner exception", " " + e);
             }
         }
+
         //calling listeners for respective views
         mTaskHandDateEditText.setOnClickListener(this);
         mTaskHandTimeEditText.setOnClickListener(this);
@@ -135,7 +148,6 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         mTaskHandTaskNameEditText = (EditText) findViewById(R.id.task_hand_name_editText);
         mTaskHandSaveButton = (Button) findViewById(R.id.task_hand_save_button);
         mTaskHandPrioritySpinner = (Spinner) findViewById(R.id.task_hand_priority_spinner);
-        txt = (TextView) findViewById(R.id.task_hand_name_textView);
     }
 
     @Override
@@ -144,7 +156,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
             case R.id.task_hand_date_editText:
                 mCalender = Calendar.getInstance();
                 mYear = mCalender.get(Calendar.YEAR);
-                mMonth = mCalender.get(Calendar.DAY_OF_MONTH);
+                mMonth = mCalender.get(Calendar.MONTH);
                 mDay = mCalender.get(Calendar.DAY_OF_MONTH);
 
                 // Launch Date Picker Dialog
@@ -178,10 +190,11 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                                 mTaskHandTimeEditText.setText(hourOfDay + ":" + minute);
                                 chosenCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 chosenCalendar.set(Calendar.MINUTE, minute);
+                                chosenCalendar.set(Calendar.SECOND,mSecond);
                                 datetime = chosenCalendar.getTimeInMillis();
                                 //logging for seeing correct date and time are stored in db
                                 Log.e("time", "" + datetime);
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm", Locale.US);
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.US);
                                 Log.e("time", "" + simpleDateFormat.format(datetime));
                             }
                         }, mHour, mMinute, true);
@@ -194,12 +207,23 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                     getDetailDataFromView();
                     long addTaskReturn = mTaskHandDBHelper.addTask(mName, mDetail, mPriority, datetime, mSqLiteDatabase);
                     if (addTaskReturn > 0) {
+                        mDetails=new AlarmDetails();
+                        mDetails.setAlarmNotificationTitle(mName);
+                        mDetails.setAlarmNotificationMsg(mDetail);
+                        mDetails.setTriggerTime(chosenCalendar.getTimeInMillis());
+                        mDetails.setPeriodic(false);
+                        mDetails.setIntervalInMilliseconds(0);
+
+                        alarmHelper.setOneTimeExactAlarm(createFakeURI((int)addTaskReturn),mDetails);
+
                         Log.d("Data Base: adding", " successful");
                         Toast.makeText(AppContext.getContext(), "One task Added", Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
                         Log.d("Data Base: adding", " unsuccessful");
-                        Toast.makeText(AppContext.getContext(), "No Added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AppContext.getContext(), "Please Enter Unique Name of Task", Toast.LENGTH_SHORT).show();
                     }
+
                     mSqLiteDatabase.close();
                 }
                 //when item is selected
@@ -208,12 +232,21 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                     boolean updateValue = mTaskHandDBHelper.updateTask(mTaskId, mName, mDetail,
                             mPriority, datetime, mSqLiteDatabase);
                     if (updateValue) {
+                        alarmHelper.cancelAlarm(createFakeURI(mTaskId));
+                        mDetails=new AlarmDetails();
+                        mDetails.setAlarmNotificationTitle(mName);
+                        mDetails.setAlarmNotificationMsg(mDetail);
+                        mDetails.setTriggerTime(datetime);
+                        mDetails.setPeriodic(false);
+                        mDetails.setIntervalInMilliseconds(0);
+                        alarmHelper.setOneTimeExactAlarm(createFakeURI(mTaskId),mDetails);
                         Log.d("Data Base: updating", " successful");
                         Toast.makeText(AppContext.getContext(), "One task Updated", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.d("Data Base: updating", " unsuccessful");
                         Toast.makeText(AppContext.getContext(), "No task updated", Toast.LENGTH_SHORT).show();
                     }
+                    finish();
                     mSqLiteDatabase.close();
                 }
                 break;
@@ -234,7 +267,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        //todo Nothing
+        //nothing to be done here
     }
 
     /**
@@ -250,5 +283,15 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         Log.d("Data : date ", "" + datetime);
         mTaskHandDBHelper = new TaskHandDBHelper(this);
         mSqLiteDatabase = mTaskHandDBHelper.getWritableDatabase();
+    }
+    public static Uri createFakeURI(int senderId)
+    {
+        return Uri.parse("content://com.example.shubham/Alarms/"+senderId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

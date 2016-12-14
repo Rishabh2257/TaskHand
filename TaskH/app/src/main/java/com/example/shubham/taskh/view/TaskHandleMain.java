@@ -1,5 +1,6 @@
-package com.example.shubham.taskh.View;
+package com.example.shubham.taskh.view;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,10 +18,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.Utility.AppContext;
 
+import layout.TaskHandAboutUsFragment;
 import layout.TaskHandGridFragment;
 import layout.TaskHandListFragment;
+import layout.TaskHandSearchFragment;
 
 /***
  * Main Activity of TaskHand Project
@@ -34,9 +36,11 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     private FragmentTransaction mFragmentTransaction;
     private NavigationView mNavigationView;
     private FloatingActionButton mTaskHandAddFAB;
+    NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_handle_layout);
         //setting ToolBar
@@ -46,6 +50,7 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mTaskDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
         //setting the listener
         mTaskDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
         //Fragment inflation
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
         mFragmentTransaction.add(R.id.task_hand_list_container, new TaskHandListFragment());
@@ -62,6 +67,7 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
 
         //adding listener for mTaskHandAddFAB
         mTaskHandAddFAB = (FloatingActionButton) findViewById(R.id.task_hand_floating_action_button);
+        mTaskHandAddFAB.setVisibility(View.VISIBLE);
         mTaskHandAddFAB.setOnClickListener(this);
     }
 
@@ -79,19 +85,16 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
                 mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
                 mFragmentTransaction.commit();
                 itemChecker(item);
-//                item.setChecked(true);
-//                mTaskDrawerLayout.closeDrawers();
                 break;
             case R.id.about_us:
-                Toast.makeText(this, "Add About Us Fragment", Toast.LENGTH_SHORT).show();
+                mTaskHandAddFAB.setVisibility(View.VISIBLE);
+                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandAboutUsFragment());
+                mFragmentTransaction.commit();
                 itemChecker(item);
                 break;
             case R.id.task_list_settings:
                 Toast.makeText(this, "Add Settings Fragment", Toast.LENGTH_SHORT).show();
-                itemChecker(item);
-                break;
-            case R.id.calender:
-                Toast.makeText(this, "Add Calender Fragment", Toast.LENGTH_SHORT).show();
                 itemChecker(item);
                 break;
         }
@@ -135,19 +138,23 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         switch (item.getItemId())
         {
             case R.id.task_hand_grid:
+                mTaskHandAddFAB.setVisibility(View.VISIBLE);
                 mFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandGridFragment());
                 mFragmentTransaction.commit();
                 itemChecker(item);
                 break;
             case R.id.task_hand_list:
+                mTaskHandAddFAB.setVisibility(View.VISIBLE);
                 mFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
                 mFragmentTransaction.commit();
                 break;
             case R.id.task_hand_search:
-                Toast.makeText(AppContext.getContext(),"to implement search",Toast.LENGTH_SHORT).show();
-               // TODO: 7/12/16 add search
+                mTaskHandAddFAB.setVisibility(View.GONE);
+                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandSearchFragment());
+                mFragmentTransaction.commit();
                 break;
         }
         return true;

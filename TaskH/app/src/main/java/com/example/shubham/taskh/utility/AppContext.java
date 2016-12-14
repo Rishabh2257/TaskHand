@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.Utility;
+package com.example.shubham.taskh.utility;
 
 import android.app.Application;
 import android.content.Context;

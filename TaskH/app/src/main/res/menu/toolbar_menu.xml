@@ -6,7 +6,7 @@
         android:id="@+id/task_hand_search"
         android:icon="@drawable/search"
         android:title="@string/search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|collapseActionView" />
     <item android:id="@+id/task_hand_grid"
         android:icon="@drawable/task_grid"
         android:title="@string/task_grid"
