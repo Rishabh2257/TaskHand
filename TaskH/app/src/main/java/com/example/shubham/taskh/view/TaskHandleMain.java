@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +32,6 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     private Toolbar mToolbar;
     private DrawerLayout mTaskDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-    private FragmentTransaction mFragmentTransaction;
     private NavigationView mNavigationView;
     private FloatingActionButton mTaskHandAddFAB;
 
@@ -79,20 +77,16 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.task_list_home:
+                //List of task
                 FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager()
                 ,R.id.task_hand_list_container,null,true,true);
-//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
-//                mFragmentTransaction.commit();
-                itemChecker(item);
+               itemChecker(item);
                 break;
             case R.id.about_us:
-                mTaskHandAddFAB.setVisibility(View.VISIBLE);
+                //Tasks in Grid
+                mTaskHandAddFAB.setVisibility(View.GONE);
                 FragmentCall.inflateFragment(new TaskHandAboutUsFragment(),getSupportFragmentManager()
-                ,R.id.task_hand_list_container,null,true,true);
-//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandAboutUsFragment());
-//                mFragmentTransaction.commit();
+                ,R.id.task_hand_list_container,null,true,true);//
                 itemChecker(item);
                 break;
             case R.id.task_list_settings:
@@ -141,26 +135,17 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         {
             case R.id.task_hand_grid:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandGridFragment());
-//                mFragmentTransaction.commit();
                 FragmentCall.inflateFragment(new TaskHandGridFragment(),getSupportFragmentManager()
                         ,R.id.task_hand_list_container,null,true,true);
                 itemChecker(item);
                 break;
             case R.id.task_hand_list:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
-//                mFragmentTransaction.commit();
                 FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager()
                         ,R.id.task_hand_list_container,null,true,true);
                 break;
             case R.id.task_hand_search:
                 mTaskHandAddFAB.setVisibility(View.GONE);
-//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandSearchFragment());
-//                mFragmentTransaction.commit();
                 FragmentCall.inflateFragment(new TaskHandSearchFragment(),getSupportFragmentManager()
                         ,R.id.task_hand_list_container,null,true,true);
                 break;

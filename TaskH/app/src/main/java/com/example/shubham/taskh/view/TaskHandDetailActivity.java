@@ -19,11 +19,10 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.shubham.taskh.R;
 import com.example.shubham.taskh.alarm_new.AlarmDetails;
 import com.example.shubham.taskh.alarm_new.AlarmHelper;
 import com.example.shubham.taskh.database.TaskHandDBHelper;
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.task_hand_adapter.TaskHandDataAdapter;
 import com.example.shubham.taskh.utility.AppContext;
 
 import java.text.SimpleDateFormat;
@@ -37,9 +36,7 @@ import java.util.Locale;
  */
 public class TaskHandDetailActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
     Calendar chosenCalendar = Calendar.getInstance();
-    private AlarmDetails  mDetails;
-
-    private AlarmHelper alarmHelper;
+    private AlarmDetails mDetails;
     private Toolbar mDetailToolbar;
     private EditText mTaskHandDateEditText;
     private EditText mTaskHandTimeEditText;
@@ -53,7 +50,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
     private int mDay;
     private int mHour;
     private int mMinute;
-    private int mSecond=0;
+    private int mSecond = 0;
     private int mTaskId;
     private String mPriority;
     private String mName;
@@ -61,7 +58,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
     private TaskHandDBHelper mTaskHandDBHelper;
     private SQLiteDatabase mSqLiteDatabase;
     private long datetime;
-    private TaskHandDataAdapter mTaskHandAdapter;
+
     private Intent mTaskHandIntent;
 
     @Override
@@ -112,8 +109,8 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
             Log.e("Detail", "" + detail);
             Log.e("Priority", "" + priority);
             Log.e("id", "" + mTaskId);
-            datetime=reminderDateTime;
-            Log.e("DATE_TIME",""+datetime);
+            datetime = reminderDateTime;
+            Log.e("DATE_TIME", "" + datetime);
             chosenCalendar.setTimeInMillis(datetime);
             mTaskHandTaskNameEditText.setText(name);
             mTaskHandDetailEditText.setText(detail);
@@ -168,7 +165,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                                 mTaskHandDateEditText.setText(dayOfMonth + "-"
                                         + (monthOfYear + 1) + "-" + year);
                                 chosenCalendar.set(year, monthOfYear, dayOfMonth);
-                                datetime=chosenCalendar.getTimeInMillis();
+                                datetime = chosenCalendar.getTimeInMillis();
                                 Log.e("time", "" + dayOfMonth);
                                 Log.e("time", "" + monthOfYear);
                                 Log.e("time", "" + year);
@@ -190,7 +187,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                                 mTaskHandTimeEditText.setText(hourOfDay + ":" + minute);
                                 chosenCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 chosenCalendar.set(Calendar.MINUTE, minute);
-                                chosenCalendar.set(Calendar.SECOND,mSecond);
+                                chosenCalendar.set(Calendar.SECOND, mSecond);
                                 datetime = chosenCalendar.getTimeInMillis();
                                 //logging for seeing correct date and time are stored in db
                                 Log.e("time", "" + datetime);
@@ -202,26 +199,21 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.task_hand_save_button:
-                //when fab is clicked
+                //when save is clicked
                 if (mTaskHandIntent.getExtras() == null) {
                     getDetailDataFromView();
                     long addTaskReturn = mTaskHandDBHelper.addTask(mName, mDetail, mPriority, datetime, mSqLiteDatabase);
                     if (addTaskReturn > 0) {
-                        mDetails=new AlarmDetails();
-                        mDetails.setAlarmNotificationTitle(mName);
-                        mDetails.setAlarmNotificationMsg(mDetail);
-                        mDetails.setTriggerTime(chosenCalendar.getTimeInMillis());
-                        mDetails.setPeriodic(false);
-                        mDetails.setIntervalInMilliseconds(0);
-
-                        alarmHelper.setOneTimeExactAlarm(createFakeURI((int)addTaskReturn),mDetails);
+                        AlarmHelper.setOneTimeExactAlarm(createFakeURI((int) addTaskReturn),
+                                setAlarmDetailValues());
 
                         Log.d("Data Base: adding", " successful");
                         Toast.makeText(AppContext.getContext(), "One task Added", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
                         Log.d("Data Base: adding", " unsuccessful");
-                        Toast.makeText(AppContext.getContext(), "Please Enter Unique Name of Task", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AppContext.getContext(), "Please Enter Unique Name of Task",
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     mSqLiteDatabase.close();
@@ -232,14 +224,8 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                     boolean updateValue = mTaskHandDBHelper.updateTask(mTaskId, mName, mDetail,
                             mPriority, datetime, mSqLiteDatabase);
                     if (updateValue) {
-                        alarmHelper.cancelAlarm(createFakeURI(mTaskId));
-                        mDetails=new AlarmDetails();
-                        mDetails.setAlarmNotificationTitle(mName);
-                        mDetails.setAlarmNotificationMsg(mDetail);
-                        mDetails.setTriggerTime(datetime);
-                        mDetails.setPeriodic(false);
-                        mDetails.setIntervalInMilliseconds(0);
-                        alarmHelper.setOneTimeExactAlarm(createFakeURI(mTaskId),mDetails);
+                        AlarmHelper.cancelAlarm(createFakeURI(mTaskId));
+                        AlarmHelper.setOneTimeExactAlarm(createFakeURI(mTaskId), setAlarmDetailValues());
                         Log.d("Data Base: updating", " successful");
                         Toast.makeText(AppContext.getContext(), "One task Updated", Toast.LENGTH_SHORT).show();
                     } else {
@@ -284,14 +270,19 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         mTaskHandDBHelper = new TaskHandDBHelper(this);
         mSqLiteDatabase = mTaskHandDBHelper.getWritableDatabase();
     }
-    public static Uri createFakeURI(int senderId)
-    {
-        return Uri.parse("content://com.example.shubham/Alarms/"+senderId);
+
+    public static Uri createFakeURI(int senderId) {
+        return Uri.parse("content://com.example.shubham/Alarms/" + senderId);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    private AlarmDetails setAlarmDetailValues()
+    {
+        mDetails = new AlarmDetails();
+        mDetails.setAlarmNotificationTitle(mName);
+        mDetails.setAlarmNotificationMsg(mDetail);
+        mDetails.setTriggerTime(datetime);
+        mDetails.setPeriodic(false);
+        mDetails.setIntervalInMilliseconds(0);
+        return mDetails;
     }
 }

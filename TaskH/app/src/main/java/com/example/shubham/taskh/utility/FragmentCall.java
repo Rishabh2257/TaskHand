@@ -19,19 +19,25 @@ public class FragmentCall {
      * @param iFragmentManager instantiates the Fragment Manager.
      */
     public static void inflateFragment(Fragment iFragment, FragmentManager iFragmentManager, int iFragmentContainerId, Bundle iBundle, boolean isAddToBackStack, boolean isReplace) {
-        if (iFragment != null && iFragmentManager != null) {
-            FragmentTransaction transaction = iFragmentManager.beginTransaction();
-            if (iBundle != null)
-                iFragment.setArguments(iBundle);
-            if (isReplace)
-                transaction.replace(iFragmentContainerId, iFragment);
-            else
-                transaction.add(iFragmentContainerId, iFragment);
+       try {
+           if (iFragment != null && iFragmentManager != null) {
+               FragmentTransaction transaction = iFragmentManager.beginTransaction();
+               if (iBundle != null)
+                   iFragment.setArguments(iBundle);
+               if (isReplace)
+                   transaction.replace(iFragmentContainerId, iFragment);
+               else
+                   transaction.add(iFragmentContainerId, iFragment);
 
-            if (isAddToBackStack)
-                transaction.addToBackStack(iFragment.getClass().getSimpleName());
+               if (isAddToBackStack)
+                   transaction.addToBackStack(iFragment.getClass().getSimpleName());
 
-            transaction.commit();
-        }
+               transaction.commit();
+           }
+       }
+       catch (NullPointerException | IllegalStateException e)
+       {
+           e.printStackTrace();
+       }
     }
 }
