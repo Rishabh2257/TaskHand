@@ -15,13 +15,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.shubham.taskh.alarm_new.AlarmHelper;
-import com.example.shubham.taskh.database.TaskHandDataProvider;
-import com.example.shubham.taskh.database.TaskHandDBHelper;
 import com.example.shubham.taskh.R;
+import com.example.shubham.taskh.alarm_new.AlarmHelper;
+import com.example.shubham.taskh.database.TaskHandDBHelper;
+import com.example.shubham.taskh.database.TaskHandDataProvider;
 import com.example.shubham.taskh.task_hand_adapter.TaskHandDataAdapter;
 import com.example.shubham.taskh.utility.AppContext;
 import com.example.shubham.taskh.view.TaskHandDetailActivity;
+import com.example.shubham.taskh.view.TaskHandleMain;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +56,9 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
             setTaskHandListView(mHandDataListProviderArrayList);
         } else
             Toast.makeText(AppContext.getContext(), "Add Task", Toast.LENGTH_SHORT).show();
+
+
+        TaskHandleMain.floatButtonOn();
 
         mByCreationTimeButton=(Button)viewInflate.findViewById(R.id.sort_by_creation);
         mByPriorityButton=(Button)viewInflate.findViewById(R.id.sort_by_priority);

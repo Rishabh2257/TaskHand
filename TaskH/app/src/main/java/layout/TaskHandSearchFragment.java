@@ -142,5 +142,11 @@ public class TaskHandSearchFragment extends Fragment implements View.OnClickList
             Toast.makeText(AppContext.getContext(),"Please Enter Name",Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
 }
 

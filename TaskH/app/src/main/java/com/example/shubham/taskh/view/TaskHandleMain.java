@@ -33,7 +33,7 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     private DrawerLayout mTaskDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private NavigationView mNavigationView;
-    private FloatingActionButton mTaskHandAddFAB;
+    public static FloatingActionButton mTaskHandAddFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +129,10 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         return true;
     }
 
+    public static void floatButtonOn()
+    {
+        mTaskHandAddFAB.setVisibility(View.VISIBLE);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -148,6 +152,7 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
                 mTaskHandAddFAB.setVisibility(View.GONE);
                 FragmentCall.inflateFragment(new TaskHandSearchFragment(),getSupportFragmentManager()
                         ,R.id.task_hand_list_container,null,true,true);
+
                 break;
         }
         return true;
