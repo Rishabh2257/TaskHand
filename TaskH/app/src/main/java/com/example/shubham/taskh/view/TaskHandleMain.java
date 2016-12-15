@@ -1,6 +1,5 @@
 package com.example.shubham.taskh.view;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.shubham.taskh.R;
+import com.example.shubham.taskh.utility.FragmentCall;
 
 import layout.TaskHandAboutUsFragment;
 import layout.TaskHandGridFragment;
@@ -36,7 +36,6 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     private FragmentTransaction mFragmentTransaction;
     private NavigationView mNavigationView;
     private FloatingActionButton mTaskHandAddFAB;
-    NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +51,8 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         mTaskDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
         //Fragment inflation
-        mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mFragmentTransaction.add(R.id.task_hand_list_container, new TaskHandListFragment());
-        mFragmentTransaction.commit();
+        FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager(),
+                R.id.task_hand_list_container,null,true,false);
         try {
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setLogo(R.drawable.pirates_colour);
@@ -81,16 +79,20 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.task_list_home:
-                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
-                mFragmentTransaction.commit();
+                FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager()
+                ,R.id.task_hand_list_container,null,true,true);
+//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
+//                mFragmentTransaction.commit();
                 itemChecker(item);
                 break;
             case R.id.about_us:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandAboutUsFragment());
-                mFragmentTransaction.commit();
+                FragmentCall.inflateFragment(new TaskHandAboutUsFragment(),getSupportFragmentManager()
+                ,R.id.task_hand_list_container,null,true,true);
+//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandAboutUsFragment());
+//                mFragmentTransaction.commit();
                 itemChecker(item);
                 break;
             case R.id.task_list_settings:
@@ -139,24 +141,31 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         {
             case R.id.task_hand_grid:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandGridFragment());
-                mFragmentTransaction.commit();
+//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandGridFragment());
+//                mFragmentTransaction.commit();
+                FragmentCall.inflateFragment(new TaskHandGridFragment(),getSupportFragmentManager()
+                        ,R.id.task_hand_list_container,null,true,true);
                 itemChecker(item);
                 break;
             case R.id.task_hand_list:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
-                mFragmentTransaction.commit();
+//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandListFragment());
+//                mFragmentTransaction.commit();
+                FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager()
+                        ,R.id.task_hand_list_container,null,true,true);
                 break;
             case R.id.task_hand_search:
                 mTaskHandAddFAB.setVisibility(View.GONE);
-                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandSearchFragment());
-                mFragmentTransaction.commit();
+//                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                mFragmentTransaction.replace(R.id.task_hand_list_container, new TaskHandSearchFragment());
+//                mFragmentTransaction.commit();
+                FragmentCall.inflateFragment(new TaskHandSearchFragment(),getSupportFragmentManager()
+                        ,R.id.task_hand_list_container,null,true,true);
                 break;
         }
         return true;
     }
+
 }

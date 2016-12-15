@@ -173,7 +173,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
 
         try {
             cursor = db.query(TaskHandDatabaseSchema.TABLE_NAME, iProjection,
-                    TaskHandDatabaseSchema.TaskDetail.TASK_NAME+"LIKE ?",new String []{"%"+name+"%"},
+                    TaskHandDatabaseSchema.TaskDetail.TASK_NAME+" LIKE ?",new String []{"%"+name+"%"},
                     null, null, null);
             Log.d(TAG + "DB operation dataSearch", "implementing getting result from database");
             if (cursor != null) {

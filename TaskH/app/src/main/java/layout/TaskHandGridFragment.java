@@ -169,17 +169,34 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId())
         {
             case R.id.sort_by_creation_in_grid:
-                TaskHandDataProvider.sortArrayListWithCreationTime(mHandDataListProviderArrayListGRID);
-                mTaskHandGridDataAdapter.notifyDataSetChanged();
-                setTaskHandGridView(mHandDataListProviderArrayListGRID);
+                if (mHandDataListProviderArrayListGRID.size()!=0)
+                {
+                    TaskHandDataProvider.sortArrayListWithCreationTime(mHandDataListProviderArrayListGRID);
+                    mTaskHandGridDataAdapter.notifyDataSetChanged();
+                    setTaskHandGridView(mHandDataListProviderArrayListGRID);
+                }
+                else
+                {
+                    Toast.makeText(AppContext.getContext(),"First Add Task",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.sort_by_priority_in_grid:
-                TaskHandDataProvider.sortArrayListWithPriority(mHandDataListProviderArrayListGRID);
-                mTaskHandGridDataAdapter.notifyDataSetChanged();
-                setTaskHandGridView(mHandDataListProviderArrayListGRID);
+                if (mHandDataListProviderArrayListGRID.size()!=0)
+                {
+                    TaskHandDataProvider.sortArrayListWithPriority(mHandDataListProviderArrayListGRID);
+                    mTaskHandGridDataAdapter.notifyDataSetChanged();
+                    setTaskHandGridView(mHandDataListProviderArrayListGRID);
+                }
+                else
+                {
+                    Toast.makeText(AppContext.getContext(),"First Add Task",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }

@@ -175,14 +175,30 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
         switch (view.getId())
         {
             case R.id.sort_by_creation:
-                TaskHandDataProvider.sortArrayListWithCreationTime(mHandDataListProviderArrayList);
-                mDataAdapter.notifyDataSetChanged();
-                setTaskHandListView(mHandDataListProviderArrayList);
+                if (mHandDataListProviderArrayList.size()!=0)
+                {
+                    TaskHandDataProvider.sortArrayListWithCreationTime(mHandDataListProviderArrayList);
+                    mDataAdapter.notifyDataSetChanged();
+                    setTaskHandListView(mHandDataListProviderArrayList);
+                }
+                else
+                {
+                    Toast.makeText(AppContext.getContext(),"First Add Task",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.sort_by_priority:
-                TaskHandDataProvider.sortArrayListWithPriority(mHandDataListProviderArrayList);
-                mDataAdapter.notifyDataSetChanged();
-                setTaskHandListView(mHandDataListProviderArrayList);
+                if (mHandDataListProviderArrayList.size()!=0)
+                {
+                    TaskHandDataProvider.sortArrayListWithPriority(mHandDataListProviderArrayList);
+                    mDataAdapter.notifyDataSetChanged();
+                    setTaskHandListView(mHandDataListProviderArrayList);
+                }
+                else
+                {
+                    Toast.makeText(AppContext.getContext(),"First Add Task",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
