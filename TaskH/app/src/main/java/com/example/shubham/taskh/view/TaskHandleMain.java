@@ -13,10 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.shubham.taskh.R;
 import com.example.shubham.taskh.utility.FragmentCall;
+import com.example.shubham.taskh.utility.TaskHandHelper;
 
 import layout.TaskHandAboutUsFragment;
 import layout.TaskHandGridFragment;
@@ -29,11 +29,15 @@ import layout.TaskHandSearchFragment;
 
 public class TaskHandleMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    public static FloatingActionButton mTaskHandAddFAB;
     private Toolbar mToolbar;
     private DrawerLayout mTaskDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private NavigationView mNavigationView;
-    public static FloatingActionButton mTaskHandAddFAB;
+
+    public static void floatButtonOn() {
+        mTaskHandAddFAB.setVisibility(View.VISIBLE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +53,8 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         mTaskDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
         //Fragment inflation
-        FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager(),
-                R.id.task_hand_list_container,null,true,false);
+        FragmentCall.inflateFragment(new TaskHandListFragment(), getSupportFragmentManager(),
+                R.id.task_hand_list_container, null, false, false);
         try {
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setLogo(R.drawable.pirates_colour);
@@ -78,19 +82,19 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         switch (item.getItemId()) {
             case R.id.task_list_home:
                 //List of task
-                FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager()
-                ,R.id.task_hand_list_container,null,true,true);
-               itemChecker(item);
+                FragmentCall.inflateFragment(new TaskHandListFragment(), getSupportFragmentManager()
+                        , R.id.task_hand_list_container, null, true, true);
+                itemChecker(item);
                 break;
             case R.id.about_us:
                 //Tasks in Grid
                 mTaskHandAddFAB.setVisibility(View.GONE);
-                FragmentCall.inflateFragment(new TaskHandAboutUsFragment(),getSupportFragmentManager()
-                ,R.id.task_hand_list_container,null,true,true);//
+                FragmentCall.inflateFragment(new TaskHandAboutUsFragment(), getSupportFragmentManager()
+                        , R.id.task_hand_list_container, null, true, true);//
                 itemChecker(item);
                 break;
             case R.id.task_list_settings:
-                Toast.makeText(this, "Add Settings Fragment", Toast.LENGTH_SHORT).show();
+                TaskHandHelper.toastShort("Add Settings Fragment");
                 itemChecker(item);
                 break;
         }
@@ -129,29 +133,24 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    public static void floatButtonOn()
-    {
-        mTaskHandAddFAB.setVisibility(View.VISIBLE);
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.task_hand_grid:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-                FragmentCall.inflateFragment(new TaskHandGridFragment(),getSupportFragmentManager()
-                        ,R.id.task_hand_list_container,null,true,true);
+                FragmentCall.inflateFragment(new TaskHandGridFragment(), getSupportFragmentManager()
+                        , R.id.task_hand_list_container, null, true, true);
                 itemChecker(item);
                 break;
             case R.id.task_hand_list:
                 mTaskHandAddFAB.setVisibility(View.VISIBLE);
-                FragmentCall.inflateFragment(new TaskHandListFragment(),getSupportFragmentManager()
-                        ,R.id.task_hand_list_container,null,true,true);
+                FragmentCall.inflateFragment(new TaskHandListFragment(), getSupportFragmentManager()
+                        , R.id.task_hand_list_container, null, true, true);
                 break;
             case R.id.task_hand_search:
                 mTaskHandAddFAB.setVisibility(View.GONE);
-                FragmentCall.inflateFragment(new TaskHandSearchFragment(),getSupportFragmentManager()
-                        ,R.id.task_hand_list_container,null,true,true);
+                FragmentCall.inflateFragment(new TaskHandSearchFragment(), getSupportFragmentManager()
+                        , R.id.task_hand_list_container, null, true, true);
 
                 break;
         }

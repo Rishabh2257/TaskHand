@@ -33,6 +33,11 @@ You can concentrate on what really matters in your life instead of worrying abou
     <string name="mechanism_to_add">Press plus icon Floating Button</string>
     <string name="to_update">To Update</string>
     <string name="mechanism_to_update">Click or Touch on Task and Then Fill  The Details</string>
+    <string name="first_add_task">First Add Task</string>
+    <string name="delete_success">Deleted Successfully</string>
+    <string name="delete_unsuccess">Deletion Un success full</string>
+
+    <!--String Arrays-->
     <string-array name="priority">
         <item>Lowest</item>
         <item>Medium</item>

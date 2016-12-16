@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.task_hand_adapter;
+package com.example.shubham.taskh.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shubham.taskh.database.TaskHandDataProvider;
+import com.example.shubham.taskh.database.TaskHandDataModel;
 import com.example.shubham.taskh.R;
 
 import java.text.SimpleDateFormat;
@@ -20,23 +20,23 @@ import java.util.ArrayList;
  */
 public class TaskHandDataAdapter extends BaseAdapter {
 
-    private ArrayList<TaskHandDataProvider> mTaskHandDataProviderHandDataListProviderArrayList;
-    private TaskHandDataProvider mListProvider;
+    private ArrayList<TaskHandDataModel> mTaskHandDataProviderHandDataListModelArrayList;
+    private TaskHandDataModel mListProvider;
     private Context mContext;
 
-    public TaskHandDataAdapter(Context context, ArrayList<TaskHandDataProvider> arrayList) {
+    public TaskHandDataAdapter(Context context, ArrayList<TaskHandDataModel> arrayList) {
         this.mContext = context;
-        this.mTaskHandDataProviderHandDataListProviderArrayList = arrayList;
+        this.mTaskHandDataProviderHandDataListModelArrayList = arrayList;
     }
 
     @Override
     public int getCount() {
-        return mTaskHandDataProviderHandDataListProviderArrayList.size();
+        return mTaskHandDataProviderHandDataListModelArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mTaskHandDataProviderHandDataListProviderArrayList.get(position);
+        return mTaskHandDataProviderHandDataListModelArrayList.get(position);
     }
 
     @Override
@@ -61,11 +61,11 @@ public class TaskHandDataAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         //setting data in views
-        mListProvider = mTaskHandDataProviderHandDataListProviderArrayList.get(position);
+        mListProvider = mTaskHandDataProviderHandDataListModelArrayList.get(position);
         Log.e("data", "" + mListProvider);
-        viewHolder.mTaskHandNameTextView.setText(mListProvider.getmTaskName());
-        Log.e("Data", "" + mListProvider.getmTaskName());
-        long datetime = mListProvider.getmTaskReminderTime();
+        viewHolder.mTaskHandNameTextView.setText(mListProvider.getTaskName());
+        Log.e("Data", "" + mListProvider.getTaskName());
+        long datetime = mListProvider.getTaskReminderTime();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm");
         Log.e("time", ""+datetime+"" + simpleDateFormat.format(datetime));
         if (datetime!=0)
@@ -81,7 +81,7 @@ public class TaskHandDataAdapter extends BaseAdapter {
             viewHolder.mTaskHandImageView.setVisibility(View.INVISIBLE);
         }
         //colouring views according to priority
-        String priority=mListProvider.getmTaskPriority();
+        String priority=mListProvider.getTaskPriority();
             switch (priority)
             {
                 case "Lowest":
