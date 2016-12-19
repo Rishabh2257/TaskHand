@@ -31,7 +31,7 @@ public class TaskHandDataModel {
      * @param mTaskReminderTime  :Reminder Time of Task(Store in Long)
      * @param mTaskPriority      : Priority of Task(String)
      * @param mTaskDetail:       Detail of Task(String)
-     * @param mTaskCreationTime: Creation time of Task(Store in Long)
+     * @param mTaskCreationTime: Creation ic_time of Task(Store in Long)
      */
     public TaskHandDataModel(int mTask_Id, String mTaskName, long mTaskReminderTime,
                              String mTaskPriority, String mTaskDetail, long mTaskCreationTime) {
@@ -67,7 +67,7 @@ public class TaskHandDataModel {
 
     /**
      * Method for sorting list which is passed to it
-     * on the basis of creation time or update time
+     * on the basis of creation ic_time or update ic_time
      *
      * @param iList : ArrayList which has to be sorted
      */
@@ -208,7 +208,7 @@ public class TaskHandDataModel {
     }
 
     /***
-     * Method for getting Reminder time and Date of Task in Long type which is stored in DB
+     * Method for getting Reminder ic_time and Date of Task in Long type which is stored in DB
      *
      * @return :MTaskReminderTime(Long)
      */
@@ -239,7 +239,7 @@ public class TaskHandDataModel {
     }
 
     /***
-     * Method for setting Creation and update time and Date of Task
+     * Method for setting Creation and update ic_time and Date of Task
      *
      * @param mTaskCreationTime :Time when the task is updated or created which is stored in DB
      */

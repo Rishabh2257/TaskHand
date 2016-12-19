@@ -43,7 +43,7 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.task_handle_layout);
+        setContentView(R.layout.task_hand_main_layout);
         //setting ToolBar
         mToolbar = (Toolbar) findViewById(R.id.task_list_toolBar);
         setSupportActionBar(mToolbar);
@@ -57,7 +57,7 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
                 R.id.task_hand_list_container, null, false, false);
         try {
             getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setLogo(R.drawable.pirates_colour);
+            getSupportActionBar().setLogo(R.drawable.ic_pirates_colour);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -90,11 +90,11 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
                 //Tasks in Grid
                 mTaskHandAddFAB.setVisibility(View.GONE);
                 FragmentCall.inflateFragment(new TaskHandAboutUsFragment(), getSupportFragmentManager()
-                        , R.id.task_hand_list_container, null, true, true);//
+                        , R.id.task_hand_list_container, null, true, true);
                 itemChecker(item);
                 break;
             case R.id.task_list_settings:
-                TaskHandHelper.toastShort("Add Settings Fragment");
+                TaskHandHelper.toastShort("Settings Fragment");
                 itemChecker(item);
                 break;
         }

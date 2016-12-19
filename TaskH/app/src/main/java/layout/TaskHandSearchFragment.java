@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 /**
  * Fragment for searching a task with name
- *
+ * <p>
  * Created by shubham on 13/12/16.
  */
 public class TaskHandSearchFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -65,7 +65,7 @@ public class TaskHandSearchFragment extends Fragment implements View.OnClickList
      *
      * @param list : List of values to be populated in ListView
      */
-    private void setTaskHandListView(ArrayList<TaskHandDataModel> list) {
+    private void setTaskHandSearchListView(ArrayList<TaskHandDataModel> list) {
         TaskHandDataAdapter adapter;
         ListView searchListView;
         //check for coming list
@@ -73,13 +73,11 @@ public class TaskHandSearchFragment extends Fragment implements View.OnClickList
             Logger.debug("Data In Search Fragment", list.get(0).getTaskName());
             searchListView = (ListView) viewInflate.findViewById(R.id.search_task_hand_listView);
             searchListView.setVisibility(View.VISIBLE);
-            
+
             //initialising adapter
             adapter = new TaskHandDataAdapter(getActivity(), list);
-            
             //Attaching adapter to listView
             searchListView.setAdapter(adapter);
-            
             //Calling Listeners for Respective work
             //for getting Detail of particular selected Task
             searchListView.setOnItemClickListener(this);
@@ -87,27 +85,16 @@ public class TaskHandSearchFragment extends Fragment implements View.OnClickList
         }
     }
 
-    /***
-     * Method for returning list of values taken from TASKHAND.DB of app
-     *
-     * @param Name : Hint or Name of task which has to be searched
-     * @return :ArrayList with values
-     */
-    private ArrayList<TaskHandDataModel> getRelatedTaskList(String Name) {
-        //getting ArrayList of Values from helper Class Method: getTaskListData
-        return TaskHandDBHelper.getTaskHandSearchList(Name);
-    }
-
     @Override
     public void onClick(View view) {
         String name = mSearchEditText.getText().toString();
         if (name.length() != 0) {
 
-            mTaskHandDataArrayList = getRelatedTaskList(name);
+            mTaskHandDataArrayList = TaskHandDBHelper.getTaskHandSearchList(name);
             Logger.debug("Data", " In Search Fragment  : " + mTaskHandDataArrayList);
             if (mTaskHandDataArrayList.size() != 0) {
-                //Calling setTaskHandListView Method and passing the coming list from DB Helper method
-                setTaskHandListView(mTaskHandDataArrayList);
+                //Calling setTaskHandSearchListView Method and passing the coming list from DB Helper method
+                setTaskHandSearchListView(mTaskHandDataArrayList);
             } else {
                 TaskHandHelper.toastShort("No Task Present so Please Add Task First");
             }
@@ -117,4 +104,3 @@ public class TaskHandSearchFragment extends Fragment implements View.OnClickList
     }
 
 }
-

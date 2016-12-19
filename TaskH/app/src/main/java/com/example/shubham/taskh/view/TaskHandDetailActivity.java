@@ -3,7 +3,6 @@ package com.example.shubham.taskh.view;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,9 +17,11 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.alarm_new.AlarmDetails;
-import com.example.shubham.taskh.alarm_new.AlarmHelper;
+import com.example.shubham.taskh.alarm.AlarmDetails;
+import com.example.shubham.taskh.alarm.AlarmHelper;
+import com.example.shubham.taskh.constants.StringConstants;
 import com.example.shubham.taskh.database.TaskHandDBHelper;
+import com.example.shubham.taskh.utility.AppContext;
 import com.example.shubham.taskh.utility.Logger;
 import com.example.shubham.taskh.utility.TaskHandHelper;
 
@@ -30,11 +31,13 @@ import java.util.Locale;
 
 /**
  * Task Detail Class for storing detail of task
- * setting reminder for a particular time and date
+ * setting reminder for a particular ic_time and date
  * with notification and ringtone
  */
-public class TaskHandDetailActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
-    Calendar chosenCalendar = Calendar.getInstance();
+public class TaskHandDetailActivity extends AppCompatActivity implements View.OnClickListener,
+        AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+    private static final String TAG = TaskHandDetailActivity.class.getSimpleName();
+    private Calendar chosenCalendar = Calendar.getInstance();
     private Toolbar mDetailToolbar;
     private EditText mTaskHandDateEditText;
     private EditText mTaskHandTimeEditText;
@@ -57,16 +60,6 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
 
     private Intent mTaskHandIntent;
 
-    /**
-     * Method for Creating Fake Uri for finding the correct alarm after setting through pending Intent
-     *
-     * @param senderId :TaskId of task
-     * @return : return Uri which has id of task
-     */
-    public static Uri createFakeURI(int senderId) {
-        return Uri.parse("content://com.example.shubham/Alarms/" + senderId);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +69,10 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         setSupportActionBar(mDetailToolbar);
         try {
             getSupportActionBar().setTitle("Detail");
-            getSupportActionBar().setLogo(R.drawable.pirates_colour);
+            getSupportActionBar().setLogo(R.drawable.ic_pirates_colour);
         } catch (NullPointerException e) {
             e.printStackTrace();
+            Logger.error(TAG, "Error in Title setting", e);
         }
         //initialising the views
         initViews();
@@ -100,11 +94,11 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         if (mTaskHandIntent.getExtras() != null) {
             Bundle getTaskBundle = mTaskHandIntent.getExtras();
             Logger.debug("Task Bundle", " " + getTaskBundle);
-            String name = getTaskBundle.getString("taskName");
-            String detail = getTaskBundle.getString("taskDetail");
-            String priority = getTaskBundle.getString("taskPriority");
-            long reminderDateTime = getTaskBundle.getLong("taskReminder", 0);
-            mTaskId = getTaskBundle.getInt("taskId", 0);
+            String name = getTaskBundle.getString(StringConstants.TASK_NAME);
+            String detail = getTaskBundle.getString(StringConstants.TASK_DETAIL);
+            String priority = getTaskBundle.getString(StringConstants.TASK_PRIORITY);
+            long reminderDateTime = getTaskBundle.getLong(StringConstants.TASK_REMINDER_TIME, 0);
+            mTaskId = getTaskBundle.getInt(StringConstants.TASK_ID, 0);
 
             //setting date
             SimpleDateFormat reminderDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -118,14 +112,13 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
             mTaskHandTimeEditText.setText(reminderTimeFormat.format(reminderDateTime));
             mTaskHandPrioritySpinner.setAdapter(staticSpinnerAdapter);
             try {
-                if (!TextUtils.isEmpty(priority))
-                 {
+                if (!TextUtils.isEmpty(priority)) {
                     int spinnerPosition = staticSpinnerAdapter.getPosition(priority);
                     mTaskHandPrioritySpinner.setSelection(spinnerPosition);
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                Logger.debug("spinner exception", " " + e.getMessage());
+                Logger.error(TAG, "spinner exception", e);
             }
         }
 
@@ -181,14 +174,15 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                // Display Selected time in time_EditText
+                                // Display Selected ic_time in time_EditText
                                 mTaskHandTimeEditText.setText(hourOfDay + ":" + minute);
                                 chosenCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 chosenCalendar.set(Calendar.MINUTE, minute);
                                 chosenCalendar.set(Calendar.SECOND, mSecond);
                                 datetime = chosenCalendar.getTimeInMillis();
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.US);
-                                Logger.debug("time", "" + simpleDateFormat.format(datetime));
+                                SimpleDateFormat simpleDateFormat =
+                                        new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.US);
+                                Logger.debug("ic_time", "" + simpleDateFormat.format(datetime));
                             }
                         }, mHour, mMinute, true);
                 mTaskHandTimePickerDialog.show();
@@ -199,13 +193,16 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                 mName = mTaskHandTaskNameEditText.getText().toString();
                 mDetail = mTaskHandDetailEditText.getText().toString();
                 if (mTaskHandIntent.getExtras() == null) {
-                    long addTaskReturn = TaskHandDBHelper.addTask(mName, mDetail, mPriority, datetime);
+                    long addTaskReturn =
+                            TaskHandDBHelper.addTask(mName, mDetail, mPriority, datetime);
                     if (addTaskReturn > 0) {
                         if (datetime != 0) {
-                            AlarmHelper.setOneTimeExactAlarm(createFakeURI((int) addTaskReturn),
+                             AlarmHelper.setOneTimeExactAlarm(TaskHandHelper.createFakeURI((int) addTaskReturn),
                                     setAlarmDetailValues());
+
                         }
-                        TaskHandHelper.toastShort("One task Added");
+                        TaskHandHelper.toastShort(AppContext.getContext()
+                                .getResources().getString(R.string.one_task_added));
                         finish();
                     } else {
                         Logger.debug("Data Base: adding", " unsuccessful");
@@ -218,9 +215,11 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
                     boolean updateValue = TaskHandDBHelper.updateTask(mTaskId, mName, mDetail,
                             mPriority, datetime);
                     if (updateValue) {
-                        AlarmHelper.cancelAlarm(createFakeURI(mTaskId));
-                        AlarmHelper.setOneTimeExactAlarm(createFakeURI(mTaskId), setAlarmDetailValues());
-                        TaskHandHelper.toastShort("One task Updated");
+                        AlarmHelper.cancelAlarm(TaskHandHelper.createFakeURI(mTaskId));
+                        AlarmHelper.setOneTimeExactAlarm(TaskHandHelper.createFakeURI(mTaskId),
+                                setAlarmDetailValues());
+                        TaskHandHelper.toastShort(AppContext.getContext()
+                                .getResources().getString(R.string.task_updated));
                     } else {
                         Logger.debug("Data Base: updating", " unsuccessful");
                         TaskHandHelper.toastShort("No task updated");
@@ -233,8 +232,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        //nothing to be done here for current
-        //for update portion
+        //nothing to be done here
     }
 
     @Override
@@ -258,8 +256,7 @@ public class TaskHandDetailActivity extends AppCompatActivity implements View.On
         outDetails.setAlarmNotificationTitle(mName);
         outDetails.setAlarmNotificationMsg(mDetail);
         outDetails.setTriggerTime(datetime);
-        outDetails.setPeriodic(false);
-        outDetails.setIntervalInMilliseconds(0);
+
         return outDetails;
     }
 }

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/logo_background" />
+        android:src="@drawable/img_logo_background" />
 
     <TextView
         android:layout_width="match_parent"

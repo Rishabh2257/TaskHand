@@ -16,13 +16,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/sort_by_priority_in_grid"
-            android:text="By Priority"/>
+            android:text="@string/sort_by_priority"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/sort_by_creation_in_grid"
-            android:text="By Creation"/>
+            android:text="@string/sort_by_creation"/>
     </LinearLayout>
     <GridView
         android:id="@+id/task_hand_gridView"

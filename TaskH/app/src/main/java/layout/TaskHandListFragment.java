@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.example.shubham.taskh.R;
 import com.example.shubham.taskh.adapter.TaskHandDataAdapter;
-import com.example.shubham.taskh.alarm_new.AlarmHelper;
+import com.example.shubham.taskh.alarm.AlarmHelper;
 import com.example.shubham.taskh.database.TaskHandDBHelper;
 import com.example.shubham.taskh.database.TaskHandDataModel;
 import com.example.shubham.taskh.utility.AppContext;
@@ -28,11 +28,12 @@ import java.util.ArrayList;
 /**
  * ListFragment for showing task in ListView
  */
-public class TaskHandListFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
+public class TaskHandListFragment extends Fragment
+        implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
     private TaskHandDataAdapter mDataAdapter;
-    private ListView mListView;
+    private ListView mTaskHandListView;
     private ArrayList<TaskHandDataModel> mTaskHandDataArrayList;
-    private View viewInflate;
+    private View viewList;
     private Button mByPriorityButton;
     private Button mByCreationTimeButton;
 
@@ -43,8 +44,8 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        viewInflate = inflater.inflate(R.layout.fragment_task_hand_list, container, false);
-        mTaskHandDataArrayList = TaskHandHelper.getTaskHandArrayList();
+        viewList = inflater.inflate(R.layout.fragment_task_hand_list, container, false);
+        mTaskHandDataArrayList = TaskHandDBHelper.getTaskListData();
         Logger.debug("Data", "in TaskListFragment  : " + mTaskHandDataArrayList);
         if (mTaskHandDataArrayList.size() != 0) {
             //Calling setTaskHandListView Method and passing the coming list from DB Helper method
@@ -54,18 +55,18 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
 
         TaskHandleMain.floatButtonOn();
 
-        mByCreationTimeButton = (Button) viewInflate.findViewById(R.id.sort_by_creation);
-        mByPriorityButton = (Button) viewInflate.findViewById(R.id.sort_by_priority);
+        mByCreationTimeButton = (Button) viewList.findViewById(R.id.sort_by_creation);
+        mByPriorityButton = (Button) viewList.findViewById(R.id.sort_by_priority);
 
         mByCreationTimeButton.setOnClickListener(this);
         mByPriorityButton.setOnClickListener(this);
-        return viewInflate;
+        return viewList;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mTaskHandDataArrayList = TaskHandHelper.getTaskHandArrayList();
+        mTaskHandDataArrayList = TaskHandDBHelper.getTaskListData();
         if (mTaskHandDataArrayList.size() != 0) {
             //Calling setTaskHandListView Method and passing the coming list from
             setTaskHandListView(mTaskHandDataArrayList);
@@ -77,6 +78,8 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         Intent detailIntent = new Intent(getActivity(), TaskHandDetailActivity.class);
+        //calling TaskHandHelper class setData Method for putting data
+        // which return bundle
         detailIntent.putExtras(TaskHandHelper.setData(mTaskHandDataArrayList, position));
         //calling new activity which has data
         startActivity(detailIntent);
@@ -100,8 +103,7 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
                                     mTaskHandDataArrayList.remove(position);//removing element from ArrayList
                                     mDataAdapter.notifyDataSetChanged();//refreshing Adapter
                                     setTaskHandListView(mTaskHandDataArrayList);//resetting the data
-                                    TaskHandDetailActivity.createFakeURI(Id);//creating
-                                    AlarmHelper.cancelAlarm(TaskHandDetailActivity.createFakeURI(Id));
+                                    AlarmHelper.cancelAlarm(TaskHandHelper.createFakeURI(Id));
                                 } else
                                     TaskHandHelper.toastShort(AppContext.getContext().getResources().
                                             getString(R.string.delete_unsuccess));//Toast
@@ -128,20 +130,16 @@ public class TaskHandListFragment extends Fragment implements AdapterView.OnItem
     private void setTaskHandListView(ArrayList<TaskHandDataModel> inList) {
         //check for coming inList
         if (inList.size() != 0) {
-            mListView = (ListView) viewInflate.findViewById(R.id.task_hand_list_view);
-
+            mTaskHandListView = (ListView) viewList.findViewById(R.id.task_hand_list_view);
             //initialising adapter
             mDataAdapter = new TaskHandDataAdapter(getActivity(), inList);
-
-            //Attaching adapter to mListView
-            mListView.setAdapter(mDataAdapter);
-
+            //Attaching adapter to mTaskHandListView
+            mTaskHandListView.setAdapter(mDataAdapter);
             //Calling Listeners for Respective work
             //for getting Detail of particular selected Task
-            mListView.setOnItemClickListener(this);
-
+            mTaskHandListView.setOnItemClickListener(this);
             //open the AlertDialog For confirmation from user to delete the Task or not
-            mListView.setOnItemLongClickListener(this);
+            mTaskHandListView.setOnItemLongClickListener(this);
         }
     }
 

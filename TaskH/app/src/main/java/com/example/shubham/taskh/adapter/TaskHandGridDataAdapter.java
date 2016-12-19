@@ -1,7 +1,6 @@
 package com.example.shubham.taskh.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,33 +8,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shubham.taskh.database.TaskHandDataModel;
 import com.example.shubham.taskh.R;
+import com.example.shubham.taskh.constants.StringConstants;
+import com.example.shubham.taskh.database.TaskHandDataModel;
+import com.example.shubham.taskh.utility.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
+ * Adapter Class for TaskHandGridFragment
+ * <p/>
  * Created by shubham on 7/12/16.
  */
-public class TaskHandGridDataAdapter extends BaseAdapter{
-    private ArrayList<TaskHandDataModel> mTaskHandDataProviderHandDataListModelArrayList;
+public class TaskHandGridDataAdapter extends BaseAdapter {
+    private ArrayList<TaskHandDataModel> mTaskHandDataModelArrayList;
     private TaskHandDataModel mListProvider;
     private Context mContext;
 
     public TaskHandGridDataAdapter(Context context, ArrayList<TaskHandDataModel> arrayList) {
         this.mContext = context;
-        this.mTaskHandDataProviderHandDataListModelArrayList = arrayList;
+        this.mTaskHandDataModelArrayList = arrayList;
     }
 
     @Override
     public int getCount() {
-        return mTaskHandDataProviderHandDataListModelArrayList.size();
+        return mTaskHandDataModelArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mTaskHandDataProviderHandDataListModelArrayList.get(position);
+        return mTaskHandDataModelArrayList.get(position);
     }
 
     @Override
@@ -54,47 +58,56 @@ public class TaskHandGridDataAdapter extends BaseAdapter{
             viewHolder.mTaskHandNameTextView = (TextView) convertView.findViewById(R.id.task_hand_column_name);
             viewHolder.mTaskHandReminderTextView = (TextView) convertView.findViewById(R.id.task_hand_column_date);
             viewHolder.mTaskHandDetailTextView = (TextView) convertView.findViewById(R.id.task_hand_column_detail);
-            viewHolder.mTaskHandImageView=(ImageView)convertView.findViewById(R.id.task_hand_alarm_grid_imageView);
+            viewHolder.mTaskHandImageView = (ImageView) convertView.findViewById(R.id.task_hand_alarm_grid_imageView);
+            viewHolder.mBottomView = (View) convertView.findViewById(R.id.bottom_view);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         //setting data in views
-        mListProvider = mTaskHandDataProviderHandDataListModelArrayList.get(position);
-        Log.e("data", "" + mListProvider);
+        mListProvider = mTaskHandDataModelArrayList.get(position);
         viewHolder.mTaskHandNameTextView.setText(mListProvider.getTaskName());
-        Log.e("Data", "" + mListProvider.getTaskName());
+        Logger.debug("Data", "" + mListProvider.getTaskName());
         viewHolder.mTaskHandDetailTextView.setText(mListProvider.getTaskDetail());
-        Log.e("Data",""+mListProvider.getTaskDetail());
         long datetime = mListProvider.getTaskReminderTime();
-        //todo show date only if not today else show time
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Log.e("time", "" + simpleDateFormat.format(datetime));
-        if (datetime!=0)
-        {
+
+        if (datetime != 0) {
+            SimpleDateFormat simpleDateFormat;
+            SimpleDateFormat date = new SimpleDateFormat("dd");
+
+            if (date.format(new Date()).equals(date.format(datetime))) {
+                simpleDateFormat = new SimpleDateFormat("HH-mm");
+                Logger.debug("ic_time of alarm ", " " + simpleDateFormat.format(datetime));
+            } else {
+                simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Logger.debug("date of alarm", " " + simpleDateFormat.format(datetime));
+            }
+
+            Logger.debug("ic_time", "" + simpleDateFormat.format(datetime));
             viewHolder.mTaskHandReminderTextView.setText(simpleDateFormat.format(datetime));
-        }
-        else
-        {
+            viewHolder.mTaskHandReminderTextView.setVisibility(View.VISIBLE);
+            viewHolder.mTaskHandImageView.setVisibility(View.VISIBLE);
+        } else {
             viewHolder.mTaskHandReminderTextView.setVisibility(View.INVISIBLE);
             viewHolder.mTaskHandImageView.setVisibility(View.INVISIBLE);
         }
+
         //colouring views according to priority
-        String priority=mListProvider.getTaskPriority();
-        switch (priority)
-        {
-            case "Lowest":
-                convertView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_orange_dark));
+        String priority = mListProvider.getTaskPriority();
+        switch (priority) {
+            case StringConstants.PRIORITY_LOWEST:
+                viewHolder.mBottomView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_orange_dark));
                 break;
-            case "Medium":
-                convertView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_red_light));
+            case StringConstants.PRIORITY_MEDIUM:
+                viewHolder.mBottomView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_red_light));
                 break;
-            case "Highest":
-                convertView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_purple));
+            case StringConstants.PRIORITY_HIGHEST:
+                viewHolder.mBottomView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_purple));
+                break;
+            default:
+                viewHolder.mBottomView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
                 break;
         }
-        //convertView.setPadding(2,5,5,0);
-
         return convertView;
     }
 
@@ -106,6 +119,8 @@ public class TaskHandGridDataAdapter extends BaseAdapter{
         TextView mTaskHandReminderTextView;
         TextView mTaskHandDetailTextView;
         ImageView mTaskHandImageView;
+        View mBottomView;
+
         public ViewHolder() {
         }
     }

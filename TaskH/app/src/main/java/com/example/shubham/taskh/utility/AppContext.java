@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 /**
+ * Utility Class for getting context of Application
+ *
  * Created by shubham on 30/11/16.
  */
 public class AppContext extends Application {
@@ -13,14 +15,14 @@ public class AppContext extends Application {
         return mContext;
     }
 
-    public static void setmContext(Context mContext) {
+    public static void setContext(Context mContext) {
         AppContext.mContext = mContext;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        setmContext(this);
+        setContext(this);
     }
 
 }

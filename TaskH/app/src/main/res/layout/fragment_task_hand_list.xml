@@ -14,13 +14,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/sort_by_priority"
-            android:text="Sort By Priority"/>
+            android:text="@string/sort_by_priority"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/sort_by_creation"
-            android:text="Sort By Creation"/>
+            android:text="@string/sort_by_creation"/>
     </LinearLayout>
     <ListView
         android:layout_margin="5dp"

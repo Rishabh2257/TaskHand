@@ -1,7 +1,6 @@
 package com.example.shubham.taskh.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,34 +8,40 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shubham.taskh.database.TaskHandDataModel;
 import com.example.shubham.taskh.R;
+import com.example.shubham.taskh.constants.StringConstants;
+import com.example.shubham.taskh.database.TaskHandDataModel;
+import com.example.shubham.taskh.utility.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
+ * Adapter Class for TaskHandListFragment and TaskHandSearchFragment
+ * for setting data in list item Views
+ * <p/>
  * Created by shubham on 5/12/16.
  */
 public class TaskHandDataAdapter extends BaseAdapter {
 
-    private ArrayList<TaskHandDataModel> mTaskHandDataProviderHandDataListModelArrayList;
+    private ArrayList<TaskHandDataModel> mTaskHandDataModelArrayList;
     private TaskHandDataModel mListProvider;
     private Context mContext;
 
     public TaskHandDataAdapter(Context context, ArrayList<TaskHandDataModel> arrayList) {
         this.mContext = context;
-        this.mTaskHandDataProviderHandDataListModelArrayList = arrayList;
+        this.mTaskHandDataModelArrayList = arrayList;
     }
 
     @Override
     public int getCount() {
-        return mTaskHandDataProviderHandDataListModelArrayList.size();
+        return mTaskHandDataModelArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mTaskHandDataProviderHandDataListModelArrayList.get(position);
+        return mTaskHandDataModelArrayList.get(position);
     }
 
     @Override
@@ -54,46 +59,53 @@ public class TaskHandDataAdapter extends BaseAdapter {
             //set tag for view Holder
             viewHolder.mTaskHandNameTextView = (TextView) convertView.findViewById(R.id.task_hand_row_name);
             viewHolder.mTaskHandReminderTextView = (TextView) convertView.findViewById(R.id.task_hand_row_date);
-            viewHolder.mTaskHandImageView=(ImageView)convertView.findViewById(R.id.task_hand_Alarm_imageView);
-            viewHolder.mBackView=(View)convertView.findViewById(R.id.back_view);
+            viewHolder.mTaskHandImageView = (ImageView) convertView.findViewById(R.id.task_hand_Alarm_imageView);
+            viewHolder.mBackView = (View) convertView.findViewById(R.id.back_view);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         //setting data in views
-        mListProvider = mTaskHandDataProviderHandDataListModelArrayList.get(position);
-        Log.e("data", "" + mListProvider);
+        mListProvider = mTaskHandDataModelArrayList.get(position);
         viewHolder.mTaskHandNameTextView.setText(mListProvider.getTaskName());
-        Log.e("Data", "" + mListProvider.getTaskName());
+        Logger.debug("Data", "" + mListProvider.getTaskName());
         long datetime = mListProvider.getTaskReminderTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm");
-        Log.e("time", ""+datetime+"" + simpleDateFormat.format(datetime));
-        if (datetime!=0)
-        {
+
+        if (datetime != 0) {
+            SimpleDateFormat simpleDateFormat;
+            SimpleDateFormat date = new SimpleDateFormat("dd");
+            if (date.format(new Date()).equals(date.format(datetime))) {
+                simpleDateFormat = new SimpleDateFormat("HH-mm");
+                Logger.debug("ic_time of alarm ", " " + simpleDateFormat.format(datetime));
+            } else {
+                simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Logger.debug("date of alarm ", " " + simpleDateFormat.format(datetime));
+            }
+
             viewHolder.mTaskHandReminderTextView.setText(simpleDateFormat.format(datetime));
             viewHolder.mTaskHandReminderTextView.setVisibility(View.VISIBLE);
             viewHolder.mTaskHandImageView.setVisibility(View.VISIBLE);
 
-        }
-        else
-        {
+        } else {
             viewHolder.mTaskHandReminderTextView.setVisibility(View.INVISIBLE);
             viewHolder.mTaskHandImageView.setVisibility(View.INVISIBLE);
         }
         //colouring views according to priority
-        String priority=mListProvider.getTaskPriority();
-            switch (priority)
-            {
-                case "Lowest":
-                    viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_orange_dark));
-                    break;
-                case "Medium":
-                    viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_red_light));
-                    break;
-                case "Highest":
-                    viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_purple));
-                    break;
-            }
+        String priority = mListProvider.getTaskPriority();
+        switch (priority) {
+            case StringConstants.PRIORITY_LOWEST:
+                viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_orange_dark));
+                break;
+            case StringConstants.PRIORITY_MEDIUM:
+                viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_red_light));
+                break;
+            case StringConstants.PRIORITY_HIGHEST:
+                viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.holo_purple));
+                break;
+            default:
+                viewHolder.mBackView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                break;
+        }
         return convertView;
     }
 
@@ -105,6 +117,7 @@ public class TaskHandDataAdapter extends BaseAdapter {
         TextView mTaskHandReminderTextView;
         ImageView mTaskHandImageView;
         View mBackView;
+
         //viewHolder constructor
         public ViewHolder() {
 

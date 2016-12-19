@@ -7,8 +7,6 @@
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer Close</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank FRAGMENT</string>
     <string name="calender">Calender</string>
     <string name="alarm">Reminder Timing</string>
     <string name="save_button">Save</string>
@@ -36,6 +34,10 @@ You can concentrate on what really matters in your life instead of worrying abou
     <string name="first_add_task">First Add Task</string>
     <string name="delete_success">Deleted Successfully</string>
     <string name="delete_unsuccess">Deletion Un success full</string>
+    <string name="one_task_added">One task Added</string>
+    <string name="task_updated">Task Updated</string>
+    <string name="sort_by_creation">Sort By Creation</string>
+    <string name="sort_by_priority">Sort By Priority</string>
 
     <!--String Arrays-->
     <string-array name="priority">

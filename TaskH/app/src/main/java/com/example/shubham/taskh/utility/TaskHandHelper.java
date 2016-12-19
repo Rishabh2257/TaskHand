@@ -1,22 +1,24 @@
 package com.example.shubham.taskh.utility;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.database.TaskHandDBHelper;
 import com.example.shubham.taskh.database.TaskHandDataModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
+ * Helper Class for Toast,Setting data into bundle
+ *
  * Created by shubham on 16/12/16.
  */
 public class TaskHandHelper {
 
     /**
-     * Display a toast with supplied message for {@code SHORT} period of time.
+     * Display a toast with supplied message for {@code SHORT} period of ic_time.
      *
      * @param msg The message to be shown. Can be formatted text.
      */
@@ -27,7 +29,7 @@ public class TaskHandHelper {
     }
 
     /**
-     * Display a toast with supplied message for {@code LONG} period of time.
+     * Display a toast with supplied message for {@code LONG} period of ic_time.
      *
      * @param msg The message to be shown. Can be formatted text.
      */
@@ -62,15 +64,14 @@ public class TaskHandHelper {
         outBundle.putLong(StringConstants.TASK_REMINDER_TIME, reminderTime);
         return outBundle;
     }
-
-    /***
-     * Utility Method for returning list of values taken from TASKHAND.DB of app
+    /**
+     * Method for Creating Fake Uri for finding the correct alarm after
+     * setting through pending Intent
      *
-     * @return :ArrayList with values
+     * @param senderId :TaskId of task
+     * @return : return Uri which has id of task
      */
-    public static ArrayList<TaskHandDataModel> getTaskHandArrayList() {
-        //getting ArrayList of Values from helper Class Method: getTaskListData
-        return TaskHandDBHelper.getTaskListData();
+    public static Uri createFakeURI(int senderId) {
+        return Uri.parse(StringConstants.ALARM_ID + senderId);
     }
-
 }

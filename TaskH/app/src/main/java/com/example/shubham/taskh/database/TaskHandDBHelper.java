@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 /**
  * DB Helper Class for Database operations in App
- * <p/>
+ * <p>
  * Created by shubham on 2/12/16.
  */
 public class TaskHandDBHelper extends SQLiteOpenHelper {
@@ -33,22 +33,8 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
             + DatabaseContract.TaskDetail.TASK_TIME_CREATION + " INTEGER,"
             + DatabaseContract.TaskDetail.TASK_TIME_REMINDER + " INTEGER" + ")";
 
-    private TaskHandDataModel mTaskHandDataModel;
-
     public TaskHandDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase taskHandDb) {
-        //creating table TaskHandTable
-        try {
-            taskHandDb.execSQL(TABLE_QUERY);
-            Logger.debug(TAG, "table creation successful ");
-        } catch (SQLiteException e) {
-
-            Logger.debug(TAG, e.getMessage());
-        }
     }
 
     /***
@@ -73,7 +59,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
         try {
             outChecking = db.insertOrThrow(DatabaseContract.TABLE_NAME, null, iValues);
         } catch (SQLiteException e) {
-            Logger.debug(TAG + "DB operation :AddTask :", " insertion unsuccessful due to" + e.getMessage());
+            Logger.error(TAG + "DB operation :AddTask :", " insertion unsuccessful due to" + e.getMessage(), e);
         }
         iValues.clear();
         db.close();
@@ -111,7 +97,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
             }
         } catch (CursorIndexOutOfBoundsException | SQLiteException | NullPointerException e) {
             e.printStackTrace();
-            Logger.debug(TAG + " Exception occured", "" + e.getMessage());
+            Logger.error(TAG, " Exception occurred in getting Data", e);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -120,16 +106,10 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
         return outTaskList;
     }
 
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL(TABLE_QUERY);
-    }
-
     /***
-     * method for getting current date and time fro storing in dB
+     * method for getting current date and ic_time fro storing in dB
      *
-     * @return :the current date and time(Long data type)
+     * @return :the current date and ic_time(Long data type)
      */
     private static long getDateTime() {
         return Calendar.getInstance().getTimeInMillis();
@@ -137,15 +117,16 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
 
     /***
      * Method of updating a already created task
-     * @param id :id of task (Integer)
-     * @param iTaskName :name of Task(String)
-     * @param iTaskDetail : details of task(String)
+     *
+     * @param id            :id of task (Integer)
+     * @param iTaskName     :name of Task(String)
+     * @param iTaskDetail   : details of task(String)
      * @param iTaskPriority :Priority of task(String)
-     * @param iTaskReminder :Reminder time of task(Long)
-     * @return
+     * @param iTaskReminder :Reminder ic_time of task(Long)
+     * @return :true or false whether task is updated or not
      */
     public static boolean updateTask(int id, String iTaskName, String iTaskDetail,
-                              String iTaskPriority, long iTaskReminder) {
+                                     String iTaskPriority, long iTaskReminder) {
         SQLiteDatabase db = new TaskHandDBHelper(AppContext.getContext()).getWritableDatabase();
         ContentValues iValues = new ContentValues();
         iValues.put(DatabaseContract.TaskDetail.TASK_NAME, iTaskName);
@@ -153,7 +134,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
         iValues.put(DatabaseContract.TaskDetail.TASK_PRIORITY, iTaskPriority);
         iValues.put(DatabaseContract.TaskDetail.TASK_TIME_REMINDER, iTaskReminder);
         iValues.put(DatabaseContract.TaskDetail.TASK_TIME_CREATION, getDateTime());
-        int outRowUpdated=db.update(DatabaseContract.TABLE_NAME, iValues, DatabaseContract.TaskDetail.TASK_ID
+        int outRowUpdated = db.update(DatabaseContract.TABLE_NAME, iValues, DatabaseContract.TaskDetail.TASK_ID
                 + "= ? ", new String[]{Integer.toString(id)});
         db.close();
         return outRowUpdated >= 1;
@@ -162,6 +143,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
 
     /**
      * Method for Deletion of a particular row whose id is passed
+     *
      * @param id : id of row which has to be deleted
      * @return : number of row deleted
      */
@@ -169,9 +151,15 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
     public static int deleteNotes(int id) {
         Logger.debug("DELETE", "" + id);
         SQLiteDatabase db = new TaskHandDBHelper(AppContext.getContext()).getWritableDatabase();
+        int outRowDeleted = 0;
+        try {
+            outRowDeleted = db.delete(DatabaseContract.TABLE_NAME, DatabaseContract.TaskDetail.TASK_ID + "=?",
+                    new String[]{String.valueOf(id)});
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Logger.error(TAG, "Deletion Error", e);
+        }
 
-        int outRowDeleted=db.delete(DatabaseContract.TABLE_NAME,DatabaseContract.TaskDetail.TASK_ID +"=?",
-                new String[]{String.valueOf(id)});
         db.close();
         return outRowDeleted;
 
@@ -184,7 +172,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
      * @return : List of all the tasks which contain that hint
      */
     public static ArrayList<TaskHandDataModel> getTaskHandSearchList(String name) {
-      TaskHandDataModel mTaskHandSearchList;
+        TaskHandDataModel mTaskHandSearchList;
         ArrayList<TaskHandDataModel> outList = new ArrayList<TaskHandDataModel>();
         SQLiteDatabase db = new TaskHandDBHelper(AppContext.getContext()).getWritableDatabase();
         Cursor cursor = null;
@@ -212,7 +200,7 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
             }
         } catch (CursorIndexOutOfBoundsException | SQLiteException | NullPointerException e) {
             e.printStackTrace();
-            Logger.debug(TAG + "DB SEARCH", "" + e.getMessage());
+            Logger.error(TAG + "DB SEARCH", "" + e.getMessage() + "\n", e);
         } finally {
             if (cursor != null || db != null) {
                 cursor.close();
@@ -221,6 +209,23 @@ public class TaskHandDBHelper extends SQLiteOpenHelper {
             }
         }
         return outList;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase taskHandDb) {
+        //creating table TaskHandTable
+        try {
+            taskHandDb.execSQL(TABLE_QUERY);
+            Logger.debug(TAG, "table creation successful ");
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Logger.error(TAG, e.getMessage() + "\n", e.getCause());
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        // sqLiteDatabase.execSQL(TABLE_QUERY);
     }
 
 }

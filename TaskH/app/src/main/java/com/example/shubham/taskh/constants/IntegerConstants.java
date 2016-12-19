@@ -7,4 +7,8 @@ public class IntegerConstants {
     public static final int PRIORITY_LOWEST=1;
     public static final int PRIORITY_MEDIUM=2;
     public static final int PRIORITY_HIGHEST=3;
+
+    //Alarm Integer Constants
+    public static final int ILLEGAL_ALARM_ID = -1;
+
 }

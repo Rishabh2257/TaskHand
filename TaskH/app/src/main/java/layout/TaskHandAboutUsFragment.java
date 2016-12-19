@@ -1,6 +1,5 @@
 package layout;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,13 +22,12 @@ public class TaskHandAboutUsFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mView=inflater.inflate(R.layout.fragment_task_hand_about_us, container, false);
-        mTaskHandImage=(ImageView) mView.findViewById(R.id.task_hand_background_about_us);
-        Picasso.with(getActivity()).load(R.drawable.logo_background).into(mTaskHandImage);
+        mView = inflater.inflate(R.layout.fragment_task_hand_about_us, container, false);
+        mTaskHandImage = (ImageView) mView.findViewById(R.id.task_hand_background_about_us);
+        Picasso.with(getActivity()).load(R.drawable.img_logo_background).into(mTaskHandImage);
 
         return mView;
     }

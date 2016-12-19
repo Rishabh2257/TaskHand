@@ -15,6 +15,7 @@ import android.widget.GridView;
 
 import com.example.shubham.taskh.R;
 import com.example.shubham.taskh.adapter.TaskHandGridDataAdapter;
+import com.example.shubham.taskh.alarm.AlarmHelper;
 import com.example.shubham.taskh.database.TaskHandDBHelper;
 import com.example.shubham.taskh.database.TaskHandDataModel;
 import com.example.shubham.taskh.utility.AppContext;
@@ -25,14 +26,15 @@ import com.example.shubham.taskh.view.TaskHandDetailActivity;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
+ * TaskHand Fragment for showing data in grid viewGrid
  */
-public class TaskHandGridFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
+public class TaskHandGridFragment extends Fragment implements AdapterView.OnItemClickListener,
+        AdapterView.OnItemLongClickListener, View.OnClickListener {
 
-    private GridView mGridView;
+    private GridView mTaskHandGridView;
     private ArrayList<TaskHandDataModel> mTaskHandGridArrayList;
     private TaskHandGridDataAdapter mTaskHandGridDataAdapter;
-    private View view;
+    private View viewGrid;
     private Button mByPriorityButtonInGrid;
     private Button mByCreationTimeButtonInGrid;
 
@@ -43,28 +45,28 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_task_hand_grid, container, false);
-        mTaskHandGridArrayList = TaskHandHelper.getTaskHandArrayList();
+        viewGrid = inflater.inflate(R.layout.fragment_task_hand_grid, container, false);
+        mTaskHandGridArrayList = TaskHandDBHelper.getTaskListData();
         Logger.debug("Data", "in TaskGRIDFragment  : " + mTaskHandGridArrayList);
         if (mTaskHandGridArrayList.size() != 0) {
             //Calling setTaskHandListView Method and passing the coming list from DB Helper method
             setTaskHandGridView(mTaskHandGridArrayList);
         } else
-        TaskHandHelper.toastShort(AppContext.getContext().getResources().getString(R.string.first_add_task));
+            TaskHandHelper.toastShort(AppContext.getContext().getResources().getString(R.string.first_add_task));
 
-        mByCreationTimeButtonInGrid = (Button) view.findViewById(R.id.sort_by_creation_in_grid);
-        mByPriorityButtonInGrid = (Button) view.findViewById(R.id.sort_by_priority_in_grid);
-
+        mByCreationTimeButtonInGrid = (Button) viewGrid.findViewById(R.id.sort_by_creation_in_grid);
+        mByPriorityButtonInGrid = (Button) viewGrid.findViewById(R.id.sort_by_priority_in_grid);
+        //Calling Listeners for the button
         mByCreationTimeButtonInGrid.setOnClickListener(this);
         mByPriorityButtonInGrid.setOnClickListener(this);
 
-        return view;
+        return viewGrid;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mTaskHandGridArrayList = TaskHandHelper.getTaskHandArrayList();
+        mTaskHandGridArrayList = TaskHandDBHelper.getTaskListData();
         if (mTaskHandGridArrayList.size() != 0) {
             //Calling setTaskHandListView Method and passing the coming list from
             setTaskHandGridView(mTaskHandGridArrayList);
@@ -79,7 +81,8 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
 
         Intent detailIntent = new Intent(getActivity(), TaskHandDetailActivity.class);
         detailIntent.putExtras(TaskHandHelper.setData(mTaskHandGridArrayList, position));
-        //calling new activity which has data
+        //calling TaskHandDetailActivity which has detail of task and also
+        // you can update data of the selected item
         startActivity(detailIntent);
     }
 
@@ -98,6 +101,8 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
                                 mTaskHandGridArrayList.remove(position);
                                 mTaskHandGridDataAdapter.notifyDataSetChanged();
                                 setTaskHandGridView(mTaskHandGridArrayList);
+                                AlarmHelper.cancelAlarm(TaskHandHelper.createFakeURI(Id));
+
                             }
                         })
                 .setNegativeButton("NO",
@@ -120,16 +125,16 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
     private void setTaskHandGridView(ArrayList<TaskHandDataModel> list) {
         //check for coming list
         if (list.size() != 0) {
-            mGridView = (GridView) view.findViewById(R.id.task_hand_gridView);
+            mTaskHandGridView = (GridView) viewGrid.findViewById(R.id.task_hand_gridView);
             //initialising adapter
             mTaskHandGridDataAdapter = new TaskHandGridDataAdapter(getActivity(), list);
             //Attaching adapter to mListView
-            mGridView.setAdapter(mTaskHandGridDataAdapter);
+            mTaskHandGridView.setAdapter(mTaskHandGridDataAdapter);
             //Calling Listeners for Respective work
             //for getting Detail of particular selected Task
-            mGridView.setOnItemClickListener(this);
+            mTaskHandGridView.setOnItemClickListener(this);
             //open the AlertDialog For confirmation from user to delete the Task or not
-            mGridView.setOnItemLongClickListener(this);
+            mTaskHandGridView.setOnItemLongClickListener(this);
         }
     }
 

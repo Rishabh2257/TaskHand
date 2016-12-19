@@ -17,7 +17,7 @@ public class TaskHandSplash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taskhand_splash);
         mBackground=(ImageView)findViewById(R.id.task_hand_background);
-        Picasso.with(this).load(R.drawable.pirate_background).into(mBackground);
+        Picasso.with(this).load(R.drawable.img_pirate_background).into(mBackground);
 
         //delaying the launch of EdxProjectActivity
         new Handler().postDelayed(new Runnable() {

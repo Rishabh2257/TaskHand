@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 /**
+ * Utility class for fragment calling
+ * <p/>
  * Created by shubham on 15/12/16.
  */
 public class FragmentCall {
@@ -18,26 +20,26 @@ public class FragmentCall {
      * @param iFragment        this fragment is inflated to the layout.
      * @param iFragmentManager instantiates the Fragment Manager.
      */
-    public static void inflateFragment(Fragment iFragment, FragmentManager iFragmentManager, int iFragmentContainerId, Bundle iBundle, boolean isAddToBackStack, boolean isReplace) {
-       try {
-           if (iFragment != null && iFragmentManager != null) {
-               FragmentTransaction transaction = iFragmentManager.beginTransaction();
-               if (iBundle != null)
-                   iFragment.setArguments(iBundle);
-               if (isReplace)
-                   transaction.replace(iFragmentContainerId, iFragment);
-               else
-                   transaction.add(iFragmentContainerId, iFragment);
+    public static void inflateFragment(Fragment iFragment, FragmentManager iFragmentManager,
+                                       int iFragmentContainerId, Bundle iBundle,
+                                       boolean isAddToBackStack, boolean isReplace) {
+        try {
+            if (iFragment != null && iFragmentManager != null) {
+                FragmentTransaction transaction = iFragmentManager.beginTransaction();
+                if (iBundle != null)
+                    iFragment.setArguments(iBundle);
+                if (isReplace)
+                    transaction.replace(iFragmentContainerId, iFragment);
+                else
+                    transaction.add(iFragmentContainerId, iFragment);
 
-               if (isAddToBackStack)
-                   transaction.addToBackStack(iFragment.getClass().getSimpleName());
+                if (isAddToBackStack)
+                    transaction.addToBackStack(iFragment.getClass().getSimpleName());
 
-               transaction.commit();
-           }
-       }
-       catch (NullPointerException | IllegalStateException e)
-       {
-           e.printStackTrace();
-       }
+                transaction.commit();
+            }
+        } catch (NullPointerException | IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 }
