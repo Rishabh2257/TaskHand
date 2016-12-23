@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.view;
+package com.example.shubham.taskhand.view;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -16,14 +16,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.alarm.AlarmDetails;
-import com.example.shubham.taskh.alarm.AlarmHelper;
-import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.database.TaskHandDBHelper;
-import com.example.shubham.taskh.utility.AppContext;
-import com.example.shubham.taskh.utility.Logger;
-import com.example.shubham.taskh.utility.TaskHandHelper;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.alarm.AlarmDetails;
+import com.example.shubham.taskhand.alarm.AlarmHelper;
+import com.example.shubham.taskhand.constants.StringConstants;
+import com.example.shubham.taskhand.database.TaskHandDBHelper;
+import com.example.shubham.taskhand.utility.AppContext;
+import com.example.shubham.taskhand.utility.Logger;
+import com.example.shubham.taskhand.utility.TaskHandHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

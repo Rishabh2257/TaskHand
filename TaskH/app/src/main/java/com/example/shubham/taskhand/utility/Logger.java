@@ -1,9 +1,9 @@
-package com.example.shubham.taskh.utility;
+package com.example.shubham.taskhand.utility;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.shubham.taskh.BuildConfig;
+import com.example.shubham.taskhand.BuildConfig;
 
 /**
  * Logger Class for logging important information according to need

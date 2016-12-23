@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.alarm;
+package com.example.shubham.taskhand.alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.net.Uri;
 
-import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.utility.Logger;
-import com.example.shubham.taskh.utility.TaskHandHelper;
+import com.example.shubham.taskhand.constants.StringConstants;
+import com.example.shubham.taskhand.utility.Logger;
+import com.example.shubham.taskhand.utility.TaskHandHelper;
 
 import java.util.HashMap;
 import java.util.Iterator;

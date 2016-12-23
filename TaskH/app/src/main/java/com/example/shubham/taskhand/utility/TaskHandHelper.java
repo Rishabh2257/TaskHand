@@ -1,11 +1,11 @@
-package com.example.shubham.taskh.utility;
+package com.example.shubham.taskhand.utility;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.database.TaskHandDataModel;
+import com.example.shubham.taskhand.constants.StringConstants;
+import com.example.shubham.taskhand.database.TaskHandDataModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

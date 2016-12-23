@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.alarm;
+package com.example.shubham.taskhand.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,15 +10,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.example.shubham.taskh.constants.IntegerConstants;
-import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.utility.AppContext;
-import com.example.shubham.taskh.utility.Logger;
+import com.example.shubham.taskhand.constants.IntegerConstants;
+import com.example.shubham.taskhand.constants.StringConstants;
+import com.example.shubham.taskhand.utility.AppContext;
+import com.example.shubham.taskhand.utility.Logger;
 
 import java.io.File;
 
 /*
-Alarm Helper Class for helping in setting the alarm and cancelling of alarm
+Alarm Helper Class for setting and cancelling an alarm
  */
 public class AlarmHelper {
 
@@ -100,7 +100,6 @@ public class AlarmHelper {
         categories are the same. This does not
         compare any extra data included in the intents.*/
             alarmManager.cancel(alarmIntent);
-            //alarmCancelled = true;
             /*remove alarm from the alarm store*/
            alarmCancelled= AlarmStore.removeAlarm(alarmUri);
             Logger.debug("alarm cancel"," "+alarmCancelled);
@@ -177,6 +176,7 @@ public class AlarmHelper {
      */
     public static Ringtone soundAlarm(AlarmDetails alarmInput) {
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+
         Ringtone ringtone = RingtoneManager.getRingtone(AppContext.getContext(), uri);
         ringtone.play();
         return ringtone;

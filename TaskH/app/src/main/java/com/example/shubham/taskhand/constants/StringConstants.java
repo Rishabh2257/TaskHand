@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.constants;
+package com.example.shubham.taskhand.constants;
 
 /**
  * Created by shubham on 16/12/16.
@@ -18,11 +18,11 @@ public class StringConstants {
 
     //alarm keys and filters
     public static final String ALARM_ID = "content://com.example.shubham/Alarms/";
-    public static final String ALARM_NOTIFICATION = "com.example.shubham.taskh.alarm.notification";
-    public static final String ALARM_ACTION = "com.example.shubham.taskh.alarm.action";
-    public static final String ALARM_CATEGORY = "com.example.shubham.taskh.alarm.category";
-    public static final String ALARM_INPUT = "com.example.shubham.taskh.OneTimeAlarmInput";
-    public static final String ALARM_TYPE="com.example.shubham.taskh.dataType";
+    public static final String ALARM_NOTIFICATION = "com.example.shubham.taskhand.alarm.notification";
+    public static final String ALARM_ACTION = "com.example.shubham.taskhand.alarm.action";
+    public static final String ALARM_CATEGORY = "com.example.shubham.taskhand.alarm.category";
+    public static final String ALARM_INPUT = "com.example.shubham.taskhand.OneTimeAlarmInput";
+    public static final String ALARM_TYPE="com.example.shubham.taskhand.dataType";
     public static final String ALARM_STORE_FILE_NAME ="AlarmStore ";
 
 }

@@ -13,15 +13,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.adapter.TaskHandGridDataAdapter;
-import com.example.shubham.taskh.alarm.AlarmHelper;
-import com.example.shubham.taskh.database.TaskHandDBHelper;
-import com.example.shubham.taskh.database.TaskHandDataModel;
-import com.example.shubham.taskh.utility.AppContext;
-import com.example.shubham.taskh.utility.Logger;
-import com.example.shubham.taskh.utility.TaskHandHelper;
-import com.example.shubham.taskh.view.TaskHandDetailActivity;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.adapter.TaskHandGridDataAdapter;
+import com.example.shubham.taskhand.alarm.AlarmHelper;
+import com.example.shubham.taskhand.database.TaskHandDBHelper;
+import com.example.shubham.taskhand.database.TaskHandDataModel;
+import com.example.shubham.taskhand.utility.AppContext;
+import com.example.shubham.taskhand.utility.TaskHandHelper;
+import com.example.shubham.taskhand.view.TaskHandDetailActivity;
+import com.example.shubham.taskhand.view.TaskHandMain;
 
 import java.util.ArrayList;
 
@@ -46,19 +46,8 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewGrid = inflater.inflate(R.layout.fragment_task_hand_grid, container, false);
-        mTaskHandGridArrayList = TaskHandDBHelper.getTaskListData();
-        Logger.debug("Data", "in TaskGRIDFragment  : " + mTaskHandGridArrayList);
-        if (mTaskHandGridArrayList.size() != 0) {
-            //Calling setTaskHandListView Method and passing the coming list from DB Helper method
-            setTaskHandGridView(mTaskHandGridArrayList);
-        } else
-            TaskHandHelper.toastShort(AppContext.getContext().getResources().getString(R.string.first_add_task));
-
         mByCreationTimeButtonInGrid = (Button) viewGrid.findViewById(R.id.sort_by_creation_in_grid);
         mByPriorityButtonInGrid = (Button) viewGrid.findViewById(R.id.sort_by_priority_in_grid);
-        //Calling Listeners for the button
-        mByCreationTimeButtonInGrid.setOnClickListener(this);
-        mByPriorityButtonInGrid.setOnClickListener(this);
 
         return viewGrid;
     }
@@ -73,6 +62,11 @@ public class TaskHandGridFragment extends Fragment implements AdapterView.OnItem
         } else {
             TaskHandHelper.toastShort(AppContext.getContext().getResources().getString(R.string.first_add_task));
         }
+        TaskHandMain.floatButtonOn();
+
+        //Calling Listeners for the button
+        mByCreationTimeButtonInGrid.setOnClickListener(this);
+        mByPriorityButtonInGrid.setOnClickListener(this);
 
     }
 

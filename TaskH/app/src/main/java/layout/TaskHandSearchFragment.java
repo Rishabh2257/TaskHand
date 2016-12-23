@@ -11,13 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.adapter.TaskHandDataAdapter;
-import com.example.shubham.taskh.database.TaskHandDBHelper;
-import com.example.shubham.taskh.database.TaskHandDataModel;
-import com.example.shubham.taskh.utility.Logger;
-import com.example.shubham.taskh.utility.TaskHandHelper;
-import com.example.shubham.taskh.view.TaskHandDetailActivity;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.adapter.TaskHandDataAdapter;
+import com.example.shubham.taskhand.database.TaskHandDBHelper;
+import com.example.shubham.taskhand.database.TaskHandDataModel;
+import com.example.shubham.taskhand.utility.Logger;
+import com.example.shubham.taskhand.utility.TaskHandHelper;
+import com.example.shubham.taskhand.view.TaskHandDetailActivity;
+import com.example.shubham.taskhand.view.TaskHandMain;
 
 import java.util.ArrayList;
 
@@ -103,4 +104,9 @@ public class TaskHandSearchFragment extends Fragment implements View.OnClickList
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        TaskHandMain.floatButtonOff();
+    }
 }

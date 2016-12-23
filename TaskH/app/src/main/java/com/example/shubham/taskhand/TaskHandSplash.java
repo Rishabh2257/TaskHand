@@ -1,4 +1,4 @@
-package com.example.shubham.taskh;
+package com.example.shubham.taskhand;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
-import com.example.shubham.taskh.view.TaskHandleMain;
+import com.example.shubham.taskhand.view.TaskHandMain;
 import com.squareup.picasso.Picasso;
 
 public class TaskHandSplash extends AppCompatActivity {
@@ -23,7 +23,7 @@ public class TaskHandSplash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(TaskHandSplash.this,TaskHandleMain.class);
+                Intent intent=new Intent(TaskHandSplash.this,TaskHandMain.class);
                 startActivity(intent);
                 finish();
             }

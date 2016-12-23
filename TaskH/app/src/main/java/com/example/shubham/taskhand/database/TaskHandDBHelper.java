@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.database;
+package com.example.shubham.taskhand.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.shubham.taskh.utility.AppContext;
-import com.example.shubham.taskh.utility.Logger;
+import com.example.shubham.taskhand.utility.AppContext;
+import com.example.shubham.taskhand.utility.Logger;
 
 import java.util.ArrayList;
 import java.util.Calendar;

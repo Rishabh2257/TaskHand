@@ -12,16 +12,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.adapter.TaskHandDataAdapter;
-import com.example.shubham.taskh.alarm.AlarmHelper;
-import com.example.shubham.taskh.database.TaskHandDBHelper;
-import com.example.shubham.taskh.database.TaskHandDataModel;
-import com.example.shubham.taskh.utility.AppContext;
-import com.example.shubham.taskh.utility.Logger;
-import com.example.shubham.taskh.utility.TaskHandHelper;
-import com.example.shubham.taskh.view.TaskHandDetailActivity;
-import com.example.shubham.taskh.view.TaskHandleMain;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.adapter.TaskHandDataAdapter;
+import com.example.shubham.taskhand.alarm.AlarmHelper;
+import com.example.shubham.taskhand.database.TaskHandDBHelper;
+import com.example.shubham.taskhand.database.TaskHandDataModel;
+import com.example.shubham.taskhand.utility.AppContext;
+import com.example.shubham.taskhand.utility.TaskHandHelper;
+import com.example.shubham.taskhand.view.TaskHandDetailActivity;
+import com.example.shubham.taskhand.view.TaskHandMain;
 
 import java.util.ArrayList;
 
@@ -45,21 +44,10 @@ public class TaskHandListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewList = inflater.inflate(R.layout.fragment_task_hand_list, container, false);
-        mTaskHandDataArrayList = TaskHandDBHelper.getTaskListData();
-        Logger.debug("Data", "in TaskListFragment  : " + mTaskHandDataArrayList);
-        if (mTaskHandDataArrayList.size() != 0) {
-            //Calling setTaskHandListView Method and passing the coming list from DB Helper method
-            setTaskHandListView(mTaskHandDataArrayList);
-        } else
-            TaskHandHelper.toastShort(AppContext.getContext().getResources().getString(R.string.first_add_task));
-
-        TaskHandleMain.floatButtonOn();
 
         mByCreationTimeButton = (Button) viewList.findViewById(R.id.sort_by_creation);
         mByPriorityButton = (Button) viewList.findViewById(R.id.sort_by_priority);
 
-        mByCreationTimeButton.setOnClickListener(this);
-        mByPriorityButton.setOnClickListener(this);
         return viewList;
     }
 
@@ -73,6 +61,10 @@ public class TaskHandListFragment extends Fragment
         } else {
             TaskHandHelper.toastShort(AppContext.getContext().getResources().getString(R.string.first_add_task));
         }
+
+        TaskHandMain.floatButtonOn();
+        mByCreationTimeButton.setOnClickListener(this);
+        mByPriorityButton.setOnClickListener(this);
     }
 
     @Override

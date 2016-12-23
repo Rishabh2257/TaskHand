@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.adapter;
+package com.example.shubham.taskhand.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,10 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.database.TaskHandDataModel;
-import com.example.shubham.taskh.utility.Logger;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.constants.StringConstants;
+import com.example.shubham.taskhand.database.TaskHandDataModel;
+import com.example.shubham.taskhand.utility.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

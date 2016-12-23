@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.view;
+package com.example.shubham.taskhand.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.utility.FragmentCall;
-import com.example.shubham.taskh.utility.TaskHandHelper;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.utility.FragmentCall;
+import com.example.shubham.taskhand.utility.TaskHandHelper;
 
 import layout.TaskHandAboutUsFragment;
 import layout.TaskHandGridFragment;
@@ -27,7 +27,7 @@ import layout.TaskHandSearchFragment;
  * Main Activity of TaskHand Project
  */
 
-public class TaskHandleMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class TaskHandMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     public static FloatingActionButton mTaskHandAddFAB;
     private Toolbar mToolbar;
@@ -37,6 +37,10 @@ public class TaskHandleMain extends AppCompatActivity implements NavigationView.
 
     public static void floatButtonOn() {
         mTaskHandAddFAB.setVisibility(View.VISIBLE);
+    }
+
+    public static void floatButtonOff() {
+        mTaskHandAddFAB.setVisibility(View.INVISIBLE);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.shubham.taskh.alarm;
+package com.example.shubham.taskhand.alarm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
-import com.example.shubham.taskh.R;
-import com.example.shubham.taskh.constants.StringConstants;
-import com.example.shubham.taskh.utility.AppContext;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.constants.StringConstants;
+import com.example.shubham.taskhand.utility.AppContext;
 
 /***
  * Notification Class for showing notifications when the time comes for the alarm

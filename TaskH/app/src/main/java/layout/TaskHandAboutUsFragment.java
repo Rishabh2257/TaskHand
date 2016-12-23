@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.shubham.taskh.R;
+import com.example.shubham.taskhand.R;
+import com.example.shubham.taskhand.view.TaskHandMain;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -32,4 +33,9 @@ public class TaskHandAboutUsFragment extends Fragment {
         return mView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        TaskHandMain.floatButtonOff();
+    }
 }
